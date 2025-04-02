@@ -24,13 +24,17 @@ pub fn setup_routes(app_state: Arc<AppState>, serve_dir: ServeDir<SetStatus<Serv
         // Main Page
         .route("/", get(root))
         .route("/signin", post(jwt::sign_in_page))
-        .route("/hashme", post(jwt::hash_password_page))
         // APIs
         .merge(api_routes(app_state.clone()))
-        // Users
-        .merge(user_routes())
         .nest_service("/assets", serve_dir.clone());
-        ;
 
+    route.with_state(app_state)
+}
+
+pub fn setup_private_routes(app_state: Arc<AppState>, serve_dir: ServeDir<SetStatus<ServeFile>>) -> Router {
+    let route = Router::new()
+    .fallback(fallback)
+    .merge(user_routes())
+        .nest_service("/assets", serve_dir.clone());
     route.with_state(app_state)
 }

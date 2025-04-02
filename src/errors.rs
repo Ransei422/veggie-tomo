@@ -57,7 +57,6 @@ pub enum AuthErrorEnum {
     TokenDecodingError,
     TokenExpirationError,
     TokenAuthError,
-    HashPassError,
     SignInError,
     UsersNotFoundError
 }
@@ -89,7 +88,6 @@ impl AuthError {
             AuthErrorEnum::TokenDecodingError => String::from("Unable to decode token"),
             AuthErrorEnum::TokenExpirationError => String::from("Token is expired"),
             AuthErrorEnum::TokenAuthError => String::from("Using non-existing user token"),
-            AuthErrorEnum::HashPassError => String::from("No right password field/text provided"),
             AuthErrorEnum::SignInError => String::from("No right email/password field provided"),
             AuthErrorEnum::UsersNotFoundError => String::from("No registered user found"),
         };

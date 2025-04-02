@@ -21,9 +21,3 @@ pub struct SignInData {
     pub email: Option<String>,
     pub password: Option<String>,
 }
-
-
-#[derive(Deserialize)]
-pub struct HashData {
-    pub password: Option<String>,
-}

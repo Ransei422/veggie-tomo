@@ -67,30 +67,6 @@ pub fn decode_jwt(jwt: String, jwt_secret: String) -> Result<TokenData<Cliams>, 
 }
 
 
-pub async fn hash_password_page(
-    State(_app_state): State<Arc<AppState>>, 
-    Json(user_data): Json<HashData>,
-) -> Result<Json<String>, AuthError>{
-    if let Some(password) = user_data.password {
-        let hashed_data = hash_password(&password);
-
-        if let Ok(data) = hashed_data {
-            return Ok(Json(data));
-        } else {
-            return Err(AuthError::new(
-                StatusCode::BAD_REQUEST,
-                AuthErrorEnum::HashPassError,
-            ));
-        }
-    } else {
-        return Err(AuthError::new(
-            StatusCode::BAD_REQUEST,
-            AuthErrorEnum::HashPassError,
-        ));
-    }
-}
-
-
 pub async fn sign_in_page(
     State(app_state): State<Arc<AppState>>, 
     Json(user_data): Json<SignInData>,
