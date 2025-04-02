@@ -2,6 +2,7 @@ use std::time::Duration;
 use std::env;
 use dotenv::dotenv;
 use sqlx::postgres::PgPoolOptions;
+use tower_http::services::{ServeDir, ServeFile};
 
 use crate::router::setup_routes;
 use crate::state::AppState;
@@ -55,7 +56,9 @@ pub async fn run() {
 
     let app_state: std::sync::Arc<AppState> = AppState::new(db_pool, jwt_secret);
 
-    let app = setup_routes(app_state.clone());
+    let serve_dir = ServeDir::new("assets").not_found_service(ServeFile::new("assets/index.html"));
+    let app = setup_routes(app_state.clone(), serve_dir);
+    // app.nest_service("/assets", serve_dir.clone());
 
     let listener = tokio::net::TcpListener::bind(env_host)
         .await

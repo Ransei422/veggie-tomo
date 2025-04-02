@@ -1,5 +1,6 @@
 use std::sync::Arc;
 use routes::root::root;
+use tower_http::{services::{ServeDir, ServeFile}, set_status::SetStatus};
 
 use crate::jwt::jwt;
 use axum::{routing::{get, post},
@@ -17,7 +18,7 @@ use routes::user_handlers::user_router::user_routes;
 
 
 
-pub fn setup_routes(app_state: Arc<AppState>) -> Router {
+pub fn setup_routes(app_state: Arc<AppState>, serve_dir: ServeDir<SetStatus<ServeFile>>) -> Router {
     let route = Router::new()
         .fallback(fallback)
         // Main Page
@@ -28,6 +29,7 @@ pub fn setup_routes(app_state: Arc<AppState>) -> Router {
         .merge(api_routes(app_state.clone()))
         // Users
         .merge(user_routes())
+        .nest_service("/assets", serve_dir.clone());
         ;
 
     route.with_state(app_state)
