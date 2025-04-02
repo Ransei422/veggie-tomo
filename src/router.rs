@@ -27,7 +27,7 @@ pub fn setup_routes(app_state: Arc<AppState>) -> Router {
         // APIs
         .merge(api_routes(app_state.clone()))
         // Users
-        .merge(user_routes(app_state.clone()))
+        .merge(user_routes())
         ;
 
     route.with_state(app_state)

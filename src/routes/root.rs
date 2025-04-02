@@ -7,7 +7,7 @@ use axum::{
 };
 use crate::state::AppState;
 
-
+#[allow(dead_code)]
 #[derive(Template)]
 #[template(path="partials/root.html")]
 struct RegisterTemplate<'a> {
