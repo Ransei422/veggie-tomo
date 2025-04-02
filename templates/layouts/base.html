@@ -1,18 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ self.title }}</title>
-    <style>
-        body {background-color: rgb(92, 57, 45);}
-    </style>
-</head>
-<body>
-    <main>
-        {% block content %}
-        {% endblock content %}
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/assets/css/app.css" />
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <title>Veggie Tomo | {{ self.title }}</title>
+  </head>
+
+  <body class="">
+    <main class="min-h-screen bg-gradient-to-t from-yellow-100 to-sky-300">
+      {% block content %} {% endblock %}
     </main>
-    
-</body>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- <script src="/assets/js/app.js"></script> -->
+  </body>
 </html>
