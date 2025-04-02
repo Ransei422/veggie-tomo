@@ -10,9 +10,8 @@ use crate::{fallback::fallback,
     state::AppState
 };
 
-use routes::api_sockets::api_router::api_routes;
-
-
+use routes::api_handlers::api_router::api_routes;
+use routes::user_handlers::user_router::user_routes;
 
 
 
@@ -25,8 +24,10 @@ pub fn setup_routes(app_state: Arc<AppState>) -> Router {
         .route("/", get(root))
         .route("/signin", post(jwt::sign_in_page))
         .route("/hashme", post(jwt::hash_password_page))
-        //APIs
+        // APIs
         .merge(api_routes(app_state.clone()))
+        // Users
+        .merge(user_routes(app_state.clone()))
         ;
 
     route.with_state(app_state)

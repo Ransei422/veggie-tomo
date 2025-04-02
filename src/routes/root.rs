@@ -1,4 +1,5 @@
 use std::sync::Arc;
+use askama::Template;
 use axum::{
     extract::State,
     response::Html,
@@ -7,6 +8,17 @@ use axum::{
 use crate::state::AppState;
 
 
+#[derive(Template)]
+#[template(path="partials/root.html")]
+struct RegisterTemplate<'a> {
+    title: &'a str,
+}
+
+
 pub async fn root(State(_app_state): State<Arc<AppState>>) -> impl axum::response::IntoResponse {
-    return (StatusCode::OK, Html("Hello World"))
+    let page_template = RegisterTemplate {
+        title: "Root Page"
+    };
+
+    (StatusCode::OK, Html(page_template.render().unwrap()))
 }

@@ -1,9 +1,9 @@
 use axum::{
-    extract::{Json, Query, Request, State},
+    extract::{Json, State},
     http::StatusCode,
     response::Html,
 };
-use std::{collections::HashMap, sync::Arc};
+use std::sync::Arc;
 use serde_json::{json, Value};
 use sqlx::query;
 
