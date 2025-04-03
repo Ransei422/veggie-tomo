@@ -22,6 +22,7 @@ struct RegisterTemplate<'a> {
     title: &'a str,
     number_of_users: usize,
     messages: Vec<String>,
+    color: String
 }
 
 
@@ -50,7 +51,8 @@ pub async fn register_page(State(app_state): State<Arc<AppState>>,) -> impl axum
     let page_template: RegisterTemplate<'_> = RegisterTemplate {
         title: "Register Page",
         number_of_users: rows.len(),
-        messages: Vec::new()
+        messages: Vec::new(),
+        color: String::from("text-red-500")
     };
 
     (StatusCode::OK, Html(page_template.render().unwrap()))
@@ -79,27 +81,47 @@ pub async fn register_form(State(app_state): State<Arc<AppState>>,Form(data): Fo
         let page_template: RegisterTemplate<'_> = RegisterTemplate {
             title: "Register Page",
             number_of_users: rows.len(),
-            messages: errors_data
+            messages: errors_data,
+            color: String::from("text-red-500")
         };
     
         (StatusCode::OK, Html(page_template.render().unwrap()))
 
     } else {
-        let hashed_password = hash_password(&data.password);
-        let query = format!("INSERT INTO users (email, password_hash) VALUES ('{0}', '{1}') ON CONFLICT (email) DO NOTHING;", data.email, hashed_password.unwrap());
-
-        println!("{:#?}", query);
-        let success_message = String::from("新規管理ユーザーの登録を完了した");
         let mut msgs = Vec::new();
-        msgs.push(success_message);
+        let password_hash = hash_password(&data.password).unwrap();
+        let result = sqlx::query!(
+            "INSERT INTO users (email, password_hash) VALUES ($1, $2) ON CONFLICT (email) DO NOTHING;",
+            data.email,
+            password_hash
+        )
+        .execute(pool)
+        .await;
+    
+
+        if result.expect("EXISTING USER").rows_affected() == 0 {
+            let message = String::from("・すでに登録済みのメールアドレスが登録できない");
+            msgs.push(message);
 
 
-        let page_template: RegisterTemplate<'_> = RegisterTemplate {
-            title: "Register Page",
-            number_of_users: rows.len(),
-            messages: msgs
-        };
-        (StatusCode::OK, Html(page_template.render().unwrap()))
+            let page_template: RegisterTemplate<'_> = RegisterTemplate {
+                title: "Register Page",
+                number_of_users: rows.len(),
+                messages: msgs,
+                color: String::from("text-red-500")
+            };
+            (StatusCode::OK, Html(page_template.render().unwrap()))
+        } else {
+            let success_message = String::from("新規管理ユーザーの登録を完了した");
+            msgs.push(success_message);
+
+            let page_template: RegisterTemplate<'_> = RegisterTemplate {
+                title: "Register Page",
+                number_of_users: rows.len(),
+                messages: msgs,
+                color: String::from("text-green-500")
+            };
+            (StatusCode::OK, Html(page_template.render().unwrap()))
+        }
     }
-
 }

@@ -27,7 +27,7 @@
                 登録
             </button>
             {% if messages.len() > 0 %}
-              <div class="text-red-500" style="padding-top: 5px;">
+              <div class="{{ color }}" style="padding-top: 5px;">
                 <ul>
                   {% for message in messages %}
                     <li>{{ message }}</li>
