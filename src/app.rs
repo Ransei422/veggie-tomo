@@ -16,6 +16,7 @@ struct Enviroment {
     jwt_secret: String,
     open_host: String,
     closed_host: String,
+    registration_allowed: String,
 }
 
 
@@ -29,20 +30,23 @@ impl Enviroment {
 
         let open_url = String::from("0.0.0.0");
         let open_port = env::var("OPEN_PORT")
-            .map_err(|_| InitErrors::new(errors::InitializationErrorEnum::SitePortError)).unwrap();
+            .map_err(|_| InitErrors::new(errors::InitializationErrorEnum::OpenSitePortError)).unwrap();
         let open_host = open_url + ":" + &open_port;
 
         let closed_url = String::from("127.0.0.1");
         let closed_port = env::var("CLOSED_PORT")
-            .map_err(|_| InitErrors::new(errors::InitializationErrorEnum::SitePortError)).unwrap();
-
+            .map_err(|_| InitErrors::new(errors::InitializationErrorEnum::ClosedSitePortError)).unwrap();
         let closed_host = closed_url + ":" + &closed_port;
+
+        let registration_allowed = env::var("REGISTRATON_ALLOWED")
+        .map_err(|_| InitErrors::new(errors::InitializationErrorEnum::RegistrationError)).unwrap();
 
         Enviroment {
             database_url,
             jwt_secret,
             open_host,
-            closed_host
+            closed_host,
+            registration_allowed
         }
     }
 }
@@ -53,6 +57,7 @@ pub async fn run() {
     let jwt_secret = env_vals.jwt_secret.clone().to_string();
     let open_env_host = env_vals.open_host;
     let closed_env_host = env_vals.closed_host;
+    let registration_allowed: bool = env_vals.registration_allowed == "true";
 
     let db_pool = PgPoolOptions::new()
         .max_connections(10)
@@ -76,12 +81,14 @@ pub async fn run() {
         .await
         .unwrap();
 
-    // Localhost only for registration
-    tokio::spawn(async {
-        axum::serve(private_listener, private_app)
-            .await
-            .unwrap();
-    });
+    if registration_allowed {
+        // Localhost only for registration
+        tokio::spawn(async {
+            axum::serve(private_listener, private_app)
+                .await
+                .unwrap();
+        });
+    }
 
     // Open for API
     axum::serve(listener, app)

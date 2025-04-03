@@ -9,7 +9,6 @@
       </div>
   
       <h1 class="mx-1 font-bold text-xl mt-6">管理ユーザー登録</h1>
-  
       <form method="POST" action="/register" class="flex flex-col justify-center px-1" >
         <div class="py-4 flex flex-col">
           <label for="email">Email</label>
@@ -27,6 +26,15 @@
             <button type="submit" class="w-full cursor-pointer border bg-amber-800 rounded-lg py-2 text-white">
                 登録
             </button>
+            {% if messages.len() > 0 %}
+              <div class="text-red-500" style="padding-top: 5px;">
+                <ul>
+                  {% for message in messages %}
+                    <li>{{ message }}</li>
+                  {% endfor %}
+                </ul>
+              </div>
+            {% endif %}
           <div class="mt-4 font-bold bg-green-600 w-80 mx-auto shadow text-center text-lg mb-2 rounded-3xl text-white p-2">
             現在登録済みユーザーの数： {{ self.number_of_users }}
           </div>

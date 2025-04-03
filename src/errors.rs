@@ -10,9 +10,10 @@ use serde_json::json;
 pub enum InitializationErrorEnum {
     DBConnectionError,
     DBURLError,
-    SiteURLError,
-    SitePortError,
+    OpenSitePortError,
+    ClosedSitePortError,
     JWTKeyError,
+    RegistrationError,
 }
 
 
@@ -31,8 +32,9 @@ impl InitializationError {
             InitializationErrorEnum::DBConnectionError => String::from("[ ERR ] DB connection error. Check parameters."),
             InitializationErrorEnum::DBURLError => String::from("[ ERR ] .env must contains DATABASE_URL"),
             InitializationErrorEnum::JWTKeyError => String::from("[ ERR ] .env must contains JWT_SECRET"),
-            InitializationErrorEnum::SiteURLError => String::from("[ ERR ] .env must contains HOST"),
-            InitializationErrorEnum::SitePortError => String::from("[ ERR ] .env must contains PORT"),
+            InitializationErrorEnum::OpenSitePortError => String::from("[ ERR ] .env must contains OPEN_PORT"),
+            InitializationErrorEnum::ClosedSitePortError => String::from("[ ERR ] .env must contains CLOSED_PORT"),
+            InitializationErrorEnum::RegistrationError => String::from("[ ERR ] .env must contains REGISTRATON_ALLOWED"),
         };
 
         InitializationError {
