@@ -2260,6 +2260,7 @@ dependencies = [
  "dotenv",
  "http",
  "jsonwebtoken",
+ "once_cell",
  "serde",
  "serde_json",
  "sqlx",

@@ -17,3 +17,4 @@ jsonwebtoken = "9.3.0"
 askama = "0.13.0"
 validator = { version = "0.20", features = ["derive"]}
 tower-http = { version = "0.6.2", features = ["fs", "trace"] }
+once_cell = "1.18"
