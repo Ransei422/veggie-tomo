@@ -1,6 +1,6 @@
 use axum::{
     middleware,
-    routing::{get, post},
+    routing::post,
     Router
 };
 use std::sync::Arc;
@@ -16,10 +16,6 @@ pub fn api_routes(app_state: Arc<AppState>) -> Router<Arc<AppState>> {
     Router::new()
         .route("/api/register_vegetable", post(register_vegetables))
         .layer(middleware::from_fn_with_state(app_state.clone() ,jwt::authorize))
-
-
-        .route("/api/demo.json", get(get_demo_json).put(put_demo_json)
-        .layer(middleware::from_fn_with_state(app_state.clone() ,jwt::authorize)))
 }
 
 

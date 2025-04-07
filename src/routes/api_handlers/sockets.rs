@@ -1,7 +1,6 @@
 use axum::{
     extract::{Json, State},
-    http::StatusCode,
-    response::Html,
+    http::StatusCode
 };
 use serde::Deserialize;
 use std::sync::Arc;
@@ -18,41 +17,37 @@ pub struct VegetableJson {
 }
 
 
-// GET method to server with database counter increase
-pub async fn _main_page_get(State(app_state): State<Arc<AppState>>,) -> impl axum::response::IntoResponse {
-    let pool = &app_state.db_pool;
-    
-    let rows = query!("SELECT * FROM users")
-        .fetch_all(pool)
-        .await
-        .unwrap_or_else(|_| vec![]);
-
-    (StatusCode::OK, Html(format!("<h1>Rows: {}</h1>", rows.len())))
-}
-
-
-
-pub async fn register_vegetables(Json(data): Json<VegetableJson>) -> String {
+pub async fn register_vegetables(State(app_state): State<Arc<AppState>>, Json(data): Json<VegetableJson>) -> Json<Value> {
     if let Some(veg) = search_by_name(&data.name) {
         let meta = veg.get_metadata();
-        println!("✅ Found: {}-種 / {}科 / {}目", meta.name, meta.genus, meta.family);
+        let pool = &app_state.db_pool;
+        let result = query!(
+            r#"
+            INSERT INTO vegetables (vegetable_name, vegetable_species, vegetable_family)
+            VALUES ($1, $2, $3)
+            "#,
+            meta.name,
+            meta.genus,
+            meta.family
+        )
+        .execute(pool)
+        .await;
+
+        match result {
+            Ok(_) => {
+                let status_code = format!("{}", StatusCode::OK);
+                return json!({status_code:"登録を完了した"}).into()
+            },
+
+            Err(err) => {
+                println!("{}", err);
+                let status_code = format!("{}", StatusCode::NOT_ACCEPTABLE);
+                return json!({status_code:"データが既にある"}).into()
+            }
+        }
+
     } else {
-        println!("❌ Not found");
+        let status_code = format!("{}", StatusCode::NOT_ACCEPTABLE);
+        return json!({status_code:"データが登録不可能になっている"}).into();
     }
-
-    String::new()
-}
-
-
-// GET Demo Json data
-pub async fn get_demo_json() -> Json<Value> {
-    json!({"a":"b"}).into()
-}
-
-
-// PUT Demo Json data
-pub async fn put_demo_json(Json(data): Json<serde_json::Value>) -> String {
-    let json_data = format!("Put demo JSON data: {:?}", data);
-    println!("{:?}", json_data);
-    json_data
 }
