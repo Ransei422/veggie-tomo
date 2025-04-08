@@ -1,6 +1,6 @@
 # Veggie Tomo
 
-## Server installation
+## 1. Server installation
 
 To run do the steps bellow:
 1. cd veggie-tomo
@@ -9,7 +9,7 @@ To run do the steps bellow:
 ------------------------------------------------
 
 
-## Server initialization
+## 2. Server initialization
 
 To check everythings working acess:
 > http://<YOUR_SERVER_IP>:3000/
@@ -29,7 +29,7 @@ curl -X POST http://localhost:4000/register \
 ------------------------------------------------
 
 
-## API calls
+## 3. API calls
 
 ```
 <!-- Get JWT Token -->
