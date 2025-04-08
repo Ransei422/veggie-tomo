@@ -34,6 +34,21 @@ END
 EOF
 fi
 
+# Check and create database if it doesn't exist
+if ! sudo -u postgres psql -tAc "SELECT 1 FROM pg_database WHERE datname='veggie-tomo'" | grep -q 1; then
+    echo "Creating database 'veggie-tomo'..."
+
+    sudo -u postgres psql <<EOF
+DO \$\$
+BEGIN
+    IF NOT EXISTS (SELECT FROM pg_database WHERE datname = 'veggie-tomo') THEN
+        CREATE DATABASE "veggie-tomo" OWNER hogehoge;
+    END IF;
+END
+\$\$;
+EOF
+fi
+
 
 # Check if Rust is installed
 if ! command -v rustc &> /dev/null; then
