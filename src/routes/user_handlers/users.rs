@@ -112,6 +112,12 @@ pub async fn register_form(State(app_state): State<Arc<AppState>>,Form(data): Fo
             };
             (StatusCode::OK, Html(page_template.render().unwrap()))
         } else {
+            let rows = query!("SELECT * FROM users")
+                .fetch_all(pool)
+                .await
+                .unwrap_or_else(|_| vec![]);
+
+
             let success_message = String::from("新規管理ユーザーの登録を完了した");
             msgs.push(success_message);
 
