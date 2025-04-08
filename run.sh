@@ -17,11 +17,11 @@ if ! command -v psql &> /dev/null; then
 
     echo "Starting PostgreSQL service..."
     sudo systemctl start postgresql.service
+fi
 
-    # Create user and database
-    echo "Setting up PostgreSQL user and database..."
-
-    sudo -u postgres psql <<EOF
+# Set default database
+echo "Setting up PostgreSQL user and database..."
+sudo -u postgres psql <<EOF
 DO \$\$
 BEGIN
     IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = 'hogehoge') THEN
@@ -29,16 +29,10 @@ BEGIN
     END IF;
 END
 \$\$;
-
-DO \$\$
-BEGIN
-    IF NOT EXISTS (SELECT FROM pg_database WHERE datname = 'veggie-tomo') THEN
-        CREATE DATABASE "veggie-tomo" OWNER hogehoge;
-    END IF;
-END
-\$\$;
 EOF
-fi
+
+sudo -u postgres psql -c "CREATE DATABASE \"veggie-tomo\" OWNER hogehoge;"
+
 
 # Check if rust is installed
 if ! command -v rustc &> /dev/null; then
