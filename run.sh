@@ -42,6 +42,7 @@ fi
 if ! command -v sqlx &> /dev/null; then
     echo "Installing sqlx-cli..."
     cargo install sqlx-cli
+    sqlx migrate run
 fi
 
 # Ensure cargo-watch is installed
