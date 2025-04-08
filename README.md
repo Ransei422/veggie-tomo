@@ -12,10 +12,11 @@ To run do the steps bellow:
 ## Server initialization
 
 To check everythings working acess:
-http://<YOUR_SERVER_IP>:3000/
+> http://<YOUR_SERVER_IP>:3000/
 
-To create a admin account access:
-http://localhost:4000/register  (Available only from server's local network)
+To create an admin account access:
+> http://localhost:4000/register  (Available only from server's local network)
+
 
 → Or POST form if you can't use GUI
 
