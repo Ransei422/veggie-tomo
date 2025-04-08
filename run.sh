@@ -22,21 +22,21 @@ if ! command -v psql &> /dev/null; then
     echo "Setting up PostgreSQL user and database..."
 
     sudo -u postgres psql <<EOF
-    DO \$\$
-    BEGIN
-        IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = 'hogehoge') THEN
-            CREATE ROLE hogehoge WITH LOGIN PASSWORD 'hogehoge';
-        END IF;
-    END
-    \$\$;
+DO \$\$
+BEGIN
+    IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = 'hogehoge') THEN
+        CREATE ROLE hogehoge WITH LOGIN PASSWORD 'hogehoge';
+    END IF;
+END
+\$\$;
 
-    DO \$\$
-    BEGIN
-        IF NOT EXISTS (SELECT FROM pg_database WHERE datname = 'veggie-tomo') THEN
-            CREATE DATABASE "veggie-tomo" OWNER hogehoge;
-        END IF;
-    END
-    \$\$;
+DO \$\$
+BEGIN
+    IF NOT EXISTS (SELECT FROM pg_database WHERE datname = 'veggie-tomo') THEN
+        CREATE DATABASE "veggie-tomo" OWNER hogehoge;
+    END IF;
+END
+\$\$;
 EOF
 fi
 
