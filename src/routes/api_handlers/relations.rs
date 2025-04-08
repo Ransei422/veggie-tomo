@@ -44,7 +44,7 @@ pub enum AoiFamily {
 }
 
 
-#[derive(Debug, Clone, Eq, Hash, PartialEq)]
+#[derive(Debug, Clone)]
 pub enum AoiGenus {
     Okura,
     Roselle,
@@ -54,7 +54,7 @@ pub enum AoiGenus {
 }
 
 
-#[derive(Debug, Clone, Eq, Hash, PartialEq)]
+#[derive(Debug, Clone)]
 pub enum ShinanokiGenus {
     Moroheiya,
 }
@@ -67,13 +67,13 @@ pub enum SuirenFamily {
 }
 
 
-#[derive(Debug, Clone, Eq, Hash, PartialEq)]
+#[derive(Debug, Clone)]
 pub enum SuirenGenus {
     Hasu,
 }
 
 
-#[derive(Debug, Clone, Eq, Hash, PartialEq)]
+#[derive(Debug, Clone)]
 pub enum HagoromomoGenus {
     Junsai,
 }
@@ -123,9 +123,9 @@ impl VegMetadata for AoiGenus {
         match self {
             AoiGenus::Okura => "オクラ",
             AoiGenus::Roselle => "ローゼル",
-            AoiGenus::Okanori => "おかのり",
-            AoiGenus::Zeniaoi => "ぜにあおい",
-            AoiGenus::Tororoaoi => "とろろあおい",
+            AoiGenus::Okanori => "オカノリ",
+            AoiGenus::Zeniaoi => "ゼニアオイ",
+            AoiGenus::Tororoaoi => "トロロアオイ",
         }
     }
     fn genus(&self) -> &'static str { "アオイ" }
@@ -141,13 +141,13 @@ impl VegMetadata for ShinanokiGenus {
 
 
 impl VegMetadata for SuirenGenus {
-    fn name(&self) -> &'static str { "はす" }
+    fn name(&self) -> &'static str { "ハス" }
     fn genus(&self) -> &'static str { "スイレン" }
     fn family(&self) -> &'static str { "スイレン" }
 }
 
 impl VegMetadata for HagoromomoGenus {
-    fn name(&self) -> &'static str { "じゅんさい" }
+    fn name(&self) -> &'static str { "ジュンサイ" }
     fn genus(&self) -> &'static str { "ハゴロモモ" }
     fn family(&self) -> &'static str { "スイレン" }
 }
