@@ -1,4 +1,4 @@
-# Veggie Tomo
+# 🥬 Veggie Tomo
 
 ## 1. Server installation
 
