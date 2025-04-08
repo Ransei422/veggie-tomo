@@ -1,5 +1,14 @@
 #!/bin/bash
 
+if dpkg -s libssl-dev &> /dev/null; then
+    echo "libssl-dev is already installed."
+else
+    # Install SSL
+    echo "Installing libssl-dev..."
+    sudo apt update
+    sudo apt install libssl-dev -y
+fi
+
 # Install PostgreSQL and start the service
 if ! command -v psql &> /dev/null; then
     echo "Installing PostgreSQL..."
