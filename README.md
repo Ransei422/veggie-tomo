@@ -14,6 +14,9 @@ To run do the steps bellow:
 To check everythings working acess:
 > http://<YOUR_SERVER_IP>:3000
 
+get `YOUR_SERVER_IP` by executing `ip a | grep 192` on the server's terminal (Linux only).
+
+
 To create an admin account access:
 > http://localhost:4000/register  (Available only from server's local network)
 
@@ -30,6 +33,8 @@ curl -X POST http://localhost:4000/register \
 
 
 ## 3. API calls
+
+This will be used from front-end and phone-app.
 
 ```
 <!-- Get JWT Token -->
