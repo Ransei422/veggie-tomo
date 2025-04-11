@@ -1,55 +1,13 @@
+// == File for running the app ==
+
 use std::time::Duration;
-use std::env;
-use dotenv::dotenv;
 use sqlx::postgres::PgPoolOptions;
 use tower_http::services::{ServeDir, ServeFile};
 
 use crate::router::{setup_routes, setup_private_routes};
 use crate::state::AppState;
 use crate::errors;
-
-type InitErrors = errors::InitializationError;
-
-#[warn(dead_code)]
-struct Enviroment {
-    database_url: String,
-    jwt_secret: String,
-    open_host: String,
-    closed_host: String,
-    registration_allowed: String,
-}
-
-
-impl Enviroment {
-    fn new() -> Enviroment {
-        dotenv().ok();
-        let database_url = env::var("DATABASE_URL")
-            .map_err(|_| InitErrors::new(errors::InitializationErrorEnum::DBURLError)).unwrap();
-        let jwt_secret = env::var("JWT_SECRET")
-            .map_err(|_| InitErrors::new(errors::InitializationErrorEnum::JWTKeyError)).unwrap();
-
-        let open_url = String::from("0.0.0.0");
-        let open_port = env::var("OPEN_PORT")
-            .map_err(|_| InitErrors::new(errors::InitializationErrorEnum::OpenSitePortError)).unwrap();
-        let open_host = open_url + ":" + &open_port;
-
-        let closed_url = String::from("127.0.0.1");
-        let closed_port = env::var("CLOSED_PORT")
-            .map_err(|_| InitErrors::new(errors::InitializationErrorEnum::ClosedSitePortError)).unwrap();
-        let closed_host = closed_url + ":" + &closed_port;
-
-        let registration_allowed = env::var("REGISTRATON_ALLOWED")
-        .map_err(|_| InitErrors::new(errors::InitializationErrorEnum::RegistrationError)).unwrap();
-
-        Enviroment {
-            database_url,
-            jwt_secret,
-            open_host,
-            closed_host,
-            registration_allowed
-        }
-    }
-}
+use crate::enviroment::*;
 
 
 pub async fn run() {
@@ -68,30 +26,31 @@ pub async fn run() {
         .unwrap();
 
     let app_state: std::sync::Arc<AppState> = AppState::new(db_pool, jwt_secret);
-    let serve_dir = ServeDir::new("assets").not_found_service(ServeFile::new("assets/index.html"));
+    let serve_dir = ServeDir::new("assets")
+        .not_found_service(ServeFile::new("partials/fallback.html"));
     
     let private_app = setup_private_routes(app_state.clone(), serve_dir.clone());
-    let app = setup_routes(app_state.clone(), serve_dir);
+    let public_app = setup_routes(app_state.clone(), serve_dir);
 
     let private_listener = tokio::net::TcpListener::bind(closed_env_host)
         .await
-        .unwrap();
+        .map_err(|_| InitErrors::new(errors::InitializationErrorEnum::PortError1)).unwrap();
     
     let listener = tokio::net::TcpListener::bind(open_env_host)
         .await
-        .unwrap();
+        .map_err(|_| InitErrors::new(errors::InitializationErrorEnum::PortError2)).unwrap();
 
     if registration_allowed {
         // Localhost only for registration
         tokio::spawn(async {
             axum::serve(private_listener, private_app)
                 .await
-                .unwrap();
+                .map_err(|_| InitErrors::new(errors::InitializationErrorEnum::ServerError1)).unwrap();
         });
     }
 
     // Open for API
-    axum::serve(listener, app)
+    axum::serve(listener, public_app)
         .await
-        .unwrap();
+        .map_err(|_| InitErrors::new(errors::InitializationErrorEnum::ServerError2)).unwrap();
 }

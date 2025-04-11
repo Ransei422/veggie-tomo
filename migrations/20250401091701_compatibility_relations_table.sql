@@ -1,3 +1,5 @@
+-- Table for storing relations between vegetables
+
 CREATE TABLE compatibility_relations (
     id SERIAL PRIMARY KEY,
     vegetable_id_1 INT NOT NULL,

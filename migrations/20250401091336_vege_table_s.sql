@@ -1,3 +1,5 @@
+-- Table for storing registred vegetables
+
 CREATE TABLE vegetables (
     id SERIAL PRIMARY KEY,
     vegetable_name TEXT NOT NULL UNIQUE,

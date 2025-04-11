@@ -1,3 +1,5 @@
+// == File for app's error handling == 
+
 use axum::{body::Body,
     response::{IntoResponse, Response}, 
     Json
@@ -5,7 +7,7 @@ use axum::{body::Body,
 use http::StatusCode;
 use serde_json::json;
 
-#[allow(dead_code)]
+
 #[derive(Debug)]
 pub enum InitializationErrorEnum {
     DBConnectionError,
@@ -14,18 +16,22 @@ pub enum InitializationErrorEnum {
     ClosedSitePortError,
     JWTKeyError,
     RegistrationError,
+    PortError1,
+    PortError2,
+    ServerError1,
+    ServerError2
 }
 
 
-#[allow(dead_code)]
+
 #[derive(Debug)]
 pub struct InitializationError {
-    code: InitializationErrorEnum,
+    _code: InitializationErrorEnum,
     pub error_msg: String,
 }
 
 
-#[allow(dead_code)]
+
 impl InitializationError {
     pub fn new(code: InitializationErrorEnum) -> InitializationError {
         let error_type = match code {
@@ -35,10 +41,14 @@ impl InitializationError {
             InitializationErrorEnum::OpenSitePortError => String::from("[ ERR ] .env must contains OPEN_PORT"),
             InitializationErrorEnum::ClosedSitePortError => String::from("[ ERR ] .env must contains CLOSED_PORT"),
             InitializationErrorEnum::RegistrationError => String::from("[ ERR ] .env must contains REGISTRATON_ALLOWED"),
+            InitializationErrorEnum::PortError1 => String::from("[ ERR ] your port number for registration page is already in use"),
+            InitializationErrorEnum::PortError2 => String::from("[ ERR ] your port number for public API is already in use"),
+            InitializationErrorEnum::ServerError1 => String::from("[ ERR ] could not open private server, check your settings"),
+            InitializationErrorEnum::ServerError2 => String::from("[ ERR ] could not open public server, check your settings"),
         };
 
         InitializationError {
-            code,
+            _code: code,
             error_msg:error_type
         }
     }
@@ -81,7 +91,7 @@ impl IntoResponse for AuthError {
 }
 
 
-#[allow(dead_code)]
+
 impl AuthError {
     pub fn new(code: StatusCode, err_type: AuthErrorEnum) -> AuthError {
         let error_type = match err_type {

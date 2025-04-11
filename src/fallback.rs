@@ -1,3 +1,5 @@
+// == Axum handler for any request that fails to match the router routes ==
+
 use std::sync::Arc;
 use askama::Template;
 use axum::{extract::State, response::Html};
@@ -5,8 +7,6 @@ use http::StatusCode;
 
 use crate::state::AppState;
 
-/// axum handler for any request that fails to match the router routes.
-/// This implementation returns HTTP status code Not Found (404).
 
 
 #[allow(dead_code)]
@@ -16,9 +16,20 @@ struct NothingTemplate<'a> {
     title: &'a str,
 }
 
-pub async fn fallback(State(_app_state): State<Arc<AppState>>) -> impl axum::response::IntoResponse {
+pub async fn fallback(State(_app_state): State<Arc<AppState>>)
+    -> impl axum::response::IntoResponse {
+
     let page_template = NothingTemplate {
         title: "Nothing Here"
     };
-    return (StatusCode::OK, Html(page_template.render().unwrap()))
+    return (StatusCode::OK, Html(page_template.render()
+        .unwrap_or(String::from(
+            "<!DOCTYPE html>
+            <html lang='en'>
+                <head></head>
+                <body>
+                    <h1>Nothing here</h1>
+                </body>
+            </html>
+            "))))
 }

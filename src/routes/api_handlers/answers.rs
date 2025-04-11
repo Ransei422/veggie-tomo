@@ -2,8 +2,8 @@
 
 use axum::http::StatusCode;
 
-#[allow(dead_code)]
-#[derive(Debug)]
+
+
 pub enum ApiAnswersEnum {
     Answer1,
     Answer2,
@@ -15,23 +15,22 @@ pub enum ApiAnswersEnum {
 }
 
 
-#[allow(dead_code)]
-#[derive(Debug)]
+
 pub struct ApiAnswers {
-    name: ApiAnswersEnum,
+    _name: ApiAnswersEnum,
     pub code: StatusCode,
     pub message: String,
 }
 
 
-#[allow(dead_code)]
+
 impl ApiAnswers {
     pub fn new(answer_name: ApiAnswersEnum) -> ApiAnswers {
         let answer_type = match answer_name {
-            ApiAnswersEnum::Answer1 => String::from("登録を完了した"),
+            ApiAnswersEnum::Answer1 => String::from("データの登録を完了した"),
             ApiAnswersEnum::Answer2 => String::from("データが既にある"),
             ApiAnswersEnum::Answer3 => String::from("データが登録不可能になっている"),
-            ApiAnswersEnum::Answer4 => String::from("OK"),
+            ApiAnswersEnum::Answer4 => String::from("データが存在している"),
             ApiAnswersEnum::Answer5 => String::from("データが見つからない"),
             ApiAnswersEnum::Answer6 => String::from("データが登録不可能になっている"),
             ApiAnswersEnum::Answer7 => String::from("データが登録可能になっている"),
@@ -49,7 +48,7 @@ impl ApiAnswers {
         };
 
         ApiAnswers {
-            name: answer_name,
+            _name: answer_name,
             code: answer_code,
             message:answer_type
         }

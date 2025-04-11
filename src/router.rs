@@ -1,3 +1,5 @@
+// == Main file for routing ==
+
 use std::sync::Arc;
 use routes::root::root;
 use tower_http::{services::{ServeDir, ServeFile}, set_status::SetStatus};
@@ -13,8 +15,6 @@ use crate::{fallback::fallback,
 
 use routes::api_handlers::api_router::api_routes;
 use routes::user_handlers::user_router::user_routes;
-
-
 
 
 

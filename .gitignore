@@ -1,1 +1,44 @@
-/target
+# === Rust ===
+/target/
+**/*.rs.bk
+
+# === Build Artifacts ===
+/*.log
+/*.tmp
+
+# === IDEs & Editors ===
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# JetBrains (CLion, IntelliJ, etc.)
+.idea/
+*.iml
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*.un~
+
+# Emacs
+*~
+
+# === OS-specific ===
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# === Misc ===
+.env
+.env.*

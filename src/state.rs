@@ -1,3 +1,5 @@
+// == File for app state ==
+
 use std::sync::Arc;
 use sqlx::postgres::PgPool;
 
