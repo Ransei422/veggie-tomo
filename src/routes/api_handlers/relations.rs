@@ -1,3 +1,5 @@
+// == File for struct of all registerable vegetables ==
+
 use std::collections::HashMap;
 use once_cell::sync::Lazy;
 
@@ -17,7 +19,7 @@ pub fn search_by_family(target_family: &str) -> Vec<Vegetable> {
 
 
 
-// === Trait for metadata ===
+// Trait for metadata
 pub trait VegMetadata {
     fn name(&self) -> &'static str;
     fn genus(&self) -> &'static str;
@@ -32,7 +34,7 @@ pub enum Vegetable {
     AoiFamily(AoiFamily),
     SuirenFamily(SuirenFamily),
     SumireFamily(SumireFamily),
-    // SeriFamily(SeriFamily),
+    SeriFamily(SeriFamily),
     // TadeFamily(TadeFamily),
     // NadeshikoFamily(NadeshikoFamily),
     // BaraFamily(BaraFamily),
@@ -76,6 +78,13 @@ pub enum SuirenFamily {
 #[derive(Debug, Clone)]
 pub enum SumireFamily {
     Uri(UriGenus),
+}
+
+
+#[derive(Debug, Clone)]
+pub enum SeriFamily {
+    Ukogi(UkogiGenus),
+    Seri(SeriGenus),
 }
 
 
@@ -133,6 +142,33 @@ pub enum UriGenus {
     Pepokabocha,
     Makuwauri,
     Yuugao,
+}
+
+
+#[derive(Debug, Clone)]
+pub enum UkogiGenus {
+    Udo,
+    Taranoki,
+}
+
+
+#[derive(Debug, Clone)]
+pub enum SeriGenus {
+    Ashitaba,
+    ItarianPaseri,
+    Koriandaa,
+    SuupuSerori,  
+    SuupuMinto,  
+    Seri,  
+    Serori,  
+    Chaabiru,  
+    Diru,  
+    Ninjin,  
+    Paasunippu,  
+    Paseri,  
+    Hamaboufuu,  
+    Fennneru,  
+    Mitsuba,
 }
 
 
@@ -235,6 +271,41 @@ impl VegMetadata for UriGenus {
 }
 
 
+impl VegMetadata for UkogiGenus {
+    fn name(&self) -> &'static str {
+        match self {
+            UkogiGenus::Udo => "ウド",
+            UkogiGenus::Taranoki => "タラノキ",
+        }
+    }
+    fn genus(&self) -> &'static str { "ウコギ" }
+    fn family(&self) -> &'static str { "セリ" }
+}
+
+
+impl VegMetadata for SeriGenus {
+    fn name(&self) -> &'static str {
+        match self {
+            SeriGenus::Ashitaba => "アシタバ",
+            SeriGenus::ItarianPaseri => "イタリアンパセリ",
+            SeriGenus::Koriandaa => "コリアンダー",
+            SeriGenus::SuupuSerori => "スープセロリ",
+            SeriGenus::SuupuMinto => "スープミント",
+            SeriGenus::Seri => "セリ",
+            SeriGenus::Serori => "セロリ",
+            SeriGenus::Chaabiru => "チャービル",
+            SeriGenus::Diru => "ディル",
+            SeriGenus::Ninjin => "ニンジン",
+            SeriGenus::Paasunippu => "パースニップ",
+            SeriGenus::Paseri => "パセリ",
+            SeriGenus::Hamaboufuu => "ハマボウフウ",
+            SeriGenus::Fennneru => "フェンネル",
+            SeriGenus::Mitsuba => "ミツバ",
+        }
+    }
+    fn genus(&self) -> &'static str { "セリ" }
+    fn family(&self) -> &'static str { "セリ" }
+}
 
 
 
@@ -248,7 +319,7 @@ impl VegMetadata for UriGenus {
 
 
 
-// === Struct for returned metadata ===
+// Struct for returned metadata
 #[derive(Debug)]
 pub struct VegMeta {
     pub name: &'static str,
@@ -256,7 +327,7 @@ pub struct VegMeta {
     pub family: &'static str,
 }
 
-// === Add get_metadata to Vegetable ===
+// Add get_metadata to Vegetable
 impl Vegetable {
     pub fn get_metadata(&self) -> VegMeta {
         match self {
@@ -287,12 +358,24 @@ impl Vegetable {
                 genus: genus.genus(),
                 family: genus.family(),
             },
+
+            Vegetable::SeriFamily(SeriFamily::Seri(genus)) => VegMeta {
+                name: genus.name(),
+                genus: genus.genus(),
+                family: genus.family(),
+            },
+
+            Vegetable::SeriFamily(SeriFamily::Ukogi(genus)) => VegMeta {
+                name: genus.name(),
+                genus: genus.genus(),
+                family: genus.family(),
+            },
         }
     }
 }
 
 
-// === Static lookup table ===
+// Static lookup table
 pub static VEGETABLE_LOOKUP: Lazy<HashMap<&'static str, Vegetable>> = Lazy::new(|| {
     let mut map = HashMap::new();
 
@@ -337,6 +420,29 @@ pub static VEGETABLE_LOOKUP: Lazy<HashMap<&'static str, Vegetable>> = Lazy::new(
     map.insert(UriGenus::Makuwauri.name(), Vegetable::SumireFamily(SumireFamily::Uri(UriGenus::Makuwauri)));
     map.insert(UriGenus::Meron.name(), Vegetable::SumireFamily(SumireFamily::Uri(UriGenus::Meron)));
     map.insert(UriGenus::Yuugao.name(), Vegetable::SumireFamily(SumireFamily::Uri(UriGenus::Yuugao)));
+
+    // Ukogi
+    map.insert(UkogiGenus::Udo.name(), Vegetable::SeriFamily(SeriFamily::Ukogi(UkogiGenus::Udo)));
+    map.insert(UkogiGenus::Taranoki.name(), Vegetable::SeriFamily(SeriFamily::Ukogi(UkogiGenus::Taranoki)));
+
+
+    // Seri
+    map.insert(SeriGenus::Ashitaba.name(), Vegetable::SeriFamily(SeriFamily::Seri(SeriGenus::Ashitaba)));
+    map.insert(SeriGenus::ItarianPaseri.name(), Vegetable::SeriFamily(SeriFamily::Seri(SeriGenus::ItarianPaseri)));
+    map.insert(SeriGenus::Koriandaa.name(), Vegetable::SeriFamily(SeriFamily::Seri(SeriGenus::Koriandaa)));
+    map.insert(SeriGenus::SuupuSerori.name(), Vegetable::SeriFamily(SeriFamily::Seri(SeriGenus::SuupuSerori)));
+    map.insert(SeriGenus::SuupuMinto.name(), Vegetable::SeriFamily(SeriFamily::Seri(SeriGenus::SuupuMinto)));
+    map.insert(SeriGenus::Seri.name(), Vegetable::SeriFamily(SeriFamily::Seri(SeriGenus::Seri)));
+    map.insert(SeriGenus::Serori.name(), Vegetable::SeriFamily(SeriFamily::Seri(SeriGenus::Serori)));
+    map.insert(SeriGenus::Chaabiru.name(), Vegetable::SeriFamily(SeriFamily::Seri(SeriGenus::Chaabiru)));
+    map.insert(SeriGenus::Diru.name(), Vegetable::SeriFamily(SeriFamily::Seri(SeriGenus::Diru)));
+    map.insert(SeriGenus::Ninjin.name(), Vegetable::SeriFamily(SeriFamily::Seri(SeriGenus::Ninjin)));
+    map.insert(SeriGenus::Paasunippu.name(), Vegetable::SeriFamily(SeriFamily::Seri(SeriGenus::Paasunippu)));
+    map.insert(SeriGenus::Paseri.name(), Vegetable::SeriFamily(SeriFamily::Seri(SeriGenus::Paseri)));
+    map.insert(SeriGenus::Hamaboufuu.name(), Vegetable::SeriFamily(SeriFamily::Seri(SeriGenus::Hamaboufuu)));
+    map.insert(SeriGenus::Fennneru.name(), Vegetable::SeriFamily(SeriFamily::Seri(SeriGenus::Fennneru)));
+    map.insert(SeriGenus::Mitsuba.name(), Vegetable::SeriFamily(SeriFamily::Seri(SeriGenus::Mitsuba)));
+
 
 
     map
