@@ -23,4 +23,7 @@ pub fn api_routes(app_state: Arc<AppState>) -> Router<Arc<AppState>> {
         // Check registerable vegetable
         .route("/api/check_available_vegetable", post(check_available_vegetable))
         .layer(middleware::from_fn_with_state(app_state.clone() ,jwt::authorize))
+        // Register vegetable relationship
+        .route("/api/register_vegetable_relationship", post(register_relationship))
+        .layer(middleware::from_fn_with_state(app_state.clone() ,jwt::authorize))
 }

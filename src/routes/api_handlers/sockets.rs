@@ -4,7 +4,7 @@ use axum::extract::{Json, State};
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 use serde_json::{json, Value};
-use sqlx::{query, FromRow};
+use sqlx::FromRow;
 
 use crate::state::AppState;
 use super::relations::{search_by_family, search_by_name};
@@ -21,6 +21,15 @@ pub struct VegetableNameJson {
 #[derive(Deserialize)]
 pub struct VegetableFamilyJson {
     family_name: String,
+}
+
+
+#[derive(Deserialize)]
+pub struct VegetableRelationJson {
+    vegetable_1_name: String,
+    vegetable_2_name: String,
+    compatibility: usize,
+    explanation: String,
 }
 
 
@@ -44,22 +53,11 @@ pub struct AvailableData<'a> {
 
 
 // Register data from relations.rs to DB based on user's input
-pub async fn register_vegetables(State(app_state): State<Arc<AppState>>,
+pub async fn register_vegetables(app_state: State<Arc<AppState>>,
                                 Json(data): Json<VegetableNameJson>)
                                 -> Json<Value> {
     if let Some(veg) = search_by_name(&data.name) {
-        let meta = veg.get_metadata();
-        let pool = &app_state.db_pool;
-        let result = query!(
-            r#"
-            INSERT INTO vegetables (vegetable_name, vegetable_species, vegetable_family)
-            VALUES ($1, $2, $3)
-            "#,
-            meta.name,
-            meta.genus,
-            meta.family
-        )
-        .execute(pool)
+        let result = utils::register_vegetable_to_db(&app_state, veg)
         .await;
 
         match result {
@@ -161,4 +159,77 @@ pub async fn check_available_vegetable(Json(data): Json<VegetableFamilyJson>) ->
                 "vegetable_list": veg_list
         }).into()
     }
+}
+
+
+
+// Register relations between vegetables
+pub async fn register_relationship(app_state: State<Arc<AppState>>,
+    Json(data): Json<VegetableRelationJson>) 
+    -> Json<Value> {
+
+        let vegetable1 = data.vegetable_1_name;
+        let vegetable2 = data.vegetable_2_name;
+
+        
+
+        let vegetable_1_id = utils::search_registered(
+            &app_state, &vegetable1).await;
+
+        let veg_1 = match vegetable_1_id {
+            Ok(veg) => veg,
+            Err(_) => {
+                let answer = answers::ApiAnswers::new(
+                    answers::ApiAnswersEnum::Answer5);
+    
+                return json!({
+                        "status_code": answer.code.to_string(),
+                        "status_answer": answer.message,
+                }).into()
+            }
+        };
+        
+
+        let vegetable_2_id = utils::search_registered(
+            &app_state, &vegetable2).await;
+
+        let veg_2 = match vegetable_2_id {
+            Ok(veg) => veg,
+            Err(_) => {
+                let answer = answers::ApiAnswers::new(
+                    answers::ApiAnswersEnum::Answer5);
+    
+                return json!({
+                        "status_code": answer.code.to_string(),
+                        "status_answer": answer.message,
+                }).into()
+            }
+        };
+
+
+        let registration_result = utils::register_relationship_to_db(&app_state,
+            veg_1.id, veg_2.id, data.compatibility, data.explanation).await;
+
+
+        match registration_result {
+            Ok(_) => {
+                let answer = answers::ApiAnswers::new(
+                    answers::ApiAnswersEnum::Answer1);
+    
+                return json!({
+                        "status_code": answer.code.to_string(),
+                        "status_answer": answer.message,
+                }).into()
+            },
+
+            Err(_) => {
+                let answer = answers::ApiAnswers::new(
+                    answers::ApiAnswersEnum::Answer6);
+
+                return json!({
+                    "status_code": answer.code.to_string(),
+                    "status_answer": answer.message,
+            }).into()
+            }
+        }
 }
