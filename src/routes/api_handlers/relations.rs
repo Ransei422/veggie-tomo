@@ -35,8 +35,8 @@ pub enum Vegetable {
     SuirenFamily(SuirenFamily),
     SumireFamily(SumireFamily),
     SeriFamily(SeriFamily),
-    // TadeFamily(TadeFamily),
-    // NadeshikoFamily(NadeshikoFamily),
+    TadeFamily(TadeFamily),
+    NadeshikoFamily(NadeshikoFamily),
     // BaraFamily(BaraFamily),
     // FuuchousouFamily(FuuchousouFamily),
     // FuurosouFamily(FuurosouFamily),
@@ -85,6 +85,21 @@ pub enum SumireFamily {
 pub enum SeriFamily {
     Ukogi(UkogiGenus),
     Seri(SeriGenus),
+}
+
+
+#[derive(Debug, Clone)]
+pub enum TadeFamily {
+    Tade(TadeGenus),
+}
+
+#[derive(Debug, Clone)]
+pub enum NadeshikoFamily {
+    Akaza(AkazaGenus),
+    Suberihiyu(SuberihiyuGenus),
+    Tsuruna(TsurunaGenus),
+    Tsurumurasaki(TsurumurasakiGenus),
+    Hiyu(HiyuGenus),
 }
 
 
@@ -172,29 +187,50 @@ pub enum SeriGenus {
 }
 
 
+#[derive(Debug, Clone)]
+pub enum TadeGenus {
+    Yanagitade,
+    Aitade,
+    Rubaabu,
+}
 
 
+#[derive(Debug, Clone)]
+pub enum AkazaGenus {
+    Okahijiki,
+    Teeburubiito,
+    Fudansou,
+    Houkigi,
+    Hourensou,
+    Matsuna,
+    Yamahourensou,
+    
+}
 
 
+#[derive(Debug, Clone)]
+pub enum SuberihiyuGenus {
+    Tachisuberihiyu,
+}
 
 
+#[derive(Debug, Clone)]
+pub enum TsurunaGenus {
+    Tsuruna,
+}
 
 
+#[derive(Debug, Clone)]
+pub enum TsurumurasakiGenus {
+    Tsurumurasaki,
+}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+#[derive(Debug, Clone)]
+pub enum HiyuGenus {
+    Amaransasu,
+    Hiyu,
+}
 
 
 
@@ -308,6 +344,68 @@ impl VegMetadata for SeriGenus {
 }
 
 
+impl VegMetadata for TadeGenus {
+    fn name(&self) -> &'static str {
+        match self {
+            TadeGenus::Yanagitade => "ヤナギタデ",
+            TadeGenus::Aitade => "アイタデ",
+            TadeGenus::Rubaabu => "ルバーブ",
+        }
+    }
+    fn genus(&self) -> &'static str { "タデ" }
+    fn family(&self) -> &'static str { "タデ" }
+}
+
+
+impl VegMetadata for AkazaGenus {
+    fn name(&self) -> &'static str {
+        match self {
+            AkazaGenus::Okahijiki => "オカヒジキ",
+            AkazaGenus::Teeburubiito => "テーブルビート",
+            AkazaGenus::Fudansou  => "フダンソウ",
+            AkazaGenus::Houkigi  => "ホウキギ",
+            AkazaGenus::Hourensou  => "ホウレンソウ",
+            AkazaGenus::Matsuna  => "マツナ",
+            AkazaGenus::Yamahourensou  => "ヤマホウレンソウ",
+        }
+    }
+    fn genus(&self) -> &'static str { "アカザ" }
+    fn family(&self) -> &'static str { "ナデシコ" }
+}
+
+
+
+impl VegMetadata for SuberihiyuGenus {
+    fn name(&self) -> &'static str {" タチスベリヒユ" }
+    fn genus(&self) -> &'static str { "スベリヒユ" }
+    fn family(&self) -> &'static str { "ナデシコ" }
+}
+
+
+impl VegMetadata for TsurunaGenus {
+    fn name(&self) -> &'static str {" ツルナ" }
+    fn genus(&self) -> &'static str { "ツルナ" }
+    fn family(&self) -> &'static str { "ナデシコ" }
+}
+
+
+impl VegMetadata for TsurumurasakiGenus {
+    fn name(&self) -> &'static str {" ツルムラサキ" }
+    fn genus(&self) -> &'static str { "ツルムラサキ" }
+    fn family(&self) -> &'static str { "ナデシコ" }
+}
+
+
+impl VegMetadata for HiyuGenus {
+    fn name(&self) -> &'static str {
+        match self {
+            HiyuGenus::Amaransasu => "アマランサス",
+            HiyuGenus::Hiyu => "ヒユ",
+        }
+    }
+    fn genus(&self) -> &'static str { "ヒユ" }
+    fn family(&self) -> &'static str { "ナデシコ" }
+}
 
 
 
@@ -370,6 +468,42 @@ impl Vegetable {
                 genus: genus.genus(),
                 family: genus.family(),
             },
+
+            Vegetable::TadeFamily(TadeFamily::Tade(genus)) => VegMeta {
+                name: genus.name(),
+                genus: genus.genus(),
+                family: genus.family(),
+            },
+
+            Vegetable::NadeshikoFamily(NadeshikoFamily::Akaza(genus)) => VegMeta {
+                name: genus.name(),
+                genus: genus.genus(),
+                family: genus.family(),
+            },
+
+            Vegetable::NadeshikoFamily(NadeshikoFamily::Suberihiyu(genus)) => VegMeta {
+                name: genus.name(),
+                genus: genus.genus(),
+                family: genus.family(),
+            },
+
+            Vegetable::NadeshikoFamily(NadeshikoFamily::Tsuruna(genus)) => VegMeta {
+                name: genus.name(),
+                genus: genus.genus(),
+                family: genus.family(),
+            },
+
+            Vegetable::NadeshikoFamily(NadeshikoFamily::Tsurumurasaki(genus)) => VegMeta {
+                name: genus.name(),
+                genus: genus.genus(),
+                family: genus.family(),
+            },
+
+            Vegetable::NadeshikoFamily(NadeshikoFamily::Hiyu(genus)) => VegMeta {
+                name: genus.name(),
+                genus: genus.genus(),
+                family: genus.family(),
+            },
         }
     }
 }
@@ -386,14 +520,18 @@ pub static VEGETABLE_LOOKUP: Lazy<HashMap<&'static str, Vegetable>> = Lazy::new(
     map.insert(AoiGenus::Zeniaoi.name(), Vegetable::AoiFamily(AoiFamily::Aoi(AoiGenus::Zeniaoi)));
     map.insert(AoiGenus::Tororoaoi.name(), Vegetable::AoiFamily(AoiFamily::Aoi(AoiGenus::Tororoaoi)));
 
+
     // Shinanoki
     map.insert(ShinanokiGenus::Moroheiya.name(), Vegetable::AoiFamily(AoiFamily::Shinanoki(ShinanokiGenus::Moroheiya)));
+
 
     // Suiren
     map.insert(SuirenGenus::Hasu.name(), Vegetable::SuirenFamily(SuirenFamily::Suiren(SuirenGenus::Hasu)));
 
+
     // Hagoromomo
     map.insert(HagoromomoGenus::Junsai.name(), Vegetable::SuirenFamily(SuirenFamily::Hagoromomo(HagoromomoGenus::Junsai)));
+
 
     // Uri
     map.insert(UriGenus::Uintameron.name(), Vegetable::SumireFamily(SumireFamily::Uri(UriGenus::Uintameron)));
@@ -421,6 +559,7 @@ pub static VEGETABLE_LOOKUP: Lazy<HashMap<&'static str, Vegetable>> = Lazy::new(
     map.insert(UriGenus::Meron.name(), Vegetable::SumireFamily(SumireFamily::Uri(UriGenus::Meron)));
     map.insert(UriGenus::Yuugao.name(), Vegetable::SumireFamily(SumireFamily::Uri(UriGenus::Yuugao)));
 
+
     // Ukogi
     map.insert(UkogiGenus::Udo.name(), Vegetable::SeriFamily(SeriFamily::Ukogi(UkogiGenus::Udo)));
     map.insert(UkogiGenus::Taranoki.name(), Vegetable::SeriFamily(SeriFamily::Ukogi(UkogiGenus::Taranoki)));
@@ -443,6 +582,38 @@ pub static VEGETABLE_LOOKUP: Lazy<HashMap<&'static str, Vegetable>> = Lazy::new(
     map.insert(SeriGenus::Fennneru.name(), Vegetable::SeriFamily(SeriFamily::Seri(SeriGenus::Fennneru)));
     map.insert(SeriGenus::Mitsuba.name(), Vegetable::SeriFamily(SeriFamily::Seri(SeriGenus::Mitsuba)));
 
+
+    // Tade
+    map.insert(TadeGenus::Yanagitade.name(), Vegetable::TadeFamily(TadeFamily::Tade(TadeGenus::Yanagitade)));
+    map.insert(TadeGenus::Aitade.name(), Vegetable::TadeFamily(TadeFamily::Tade(TadeGenus::Aitade)));
+    map.insert(TadeGenus::Rubaabu.name(), Vegetable::TadeFamily(TadeFamily::Tade(TadeGenus::Rubaabu)));
+
+
+    // Akaza
+    map.insert(AkazaGenus::Okahijiki.name(), Vegetable::NadeshikoFamily(NadeshikoFamily::Akaza(AkazaGenus::Okahijiki)));
+    map.insert(AkazaGenus::Teeburubiito.name(), Vegetable::NadeshikoFamily(NadeshikoFamily::Akaza(AkazaGenus::Teeburubiito)));
+    map.insert(AkazaGenus::Houkigi.name(), Vegetable::NadeshikoFamily(NadeshikoFamily::Akaza(AkazaGenus::Houkigi)));
+    map.insert(AkazaGenus::Fudansou.name(), Vegetable::NadeshikoFamily(NadeshikoFamily::Akaza(AkazaGenus::Fudansou)));
+    map.insert(AkazaGenus::Hourensou.name(), Vegetable::NadeshikoFamily(NadeshikoFamily::Akaza(AkazaGenus::Hourensou)));
+    map.insert(AkazaGenus::Matsuna.name(), Vegetable::NadeshikoFamily(NadeshikoFamily::Akaza(AkazaGenus::Matsuna)));
+    map.insert(AkazaGenus::Yamahourensou.name(), Vegetable::NadeshikoFamily(NadeshikoFamily::Akaza(AkazaGenus::Yamahourensou)));
+
+
+    // Suberihiyu
+    map.insert(SuberihiyuGenus::Tachisuberihiyu.name(), Vegetable::NadeshikoFamily(NadeshikoFamily::Suberihiyu(SuberihiyuGenus::Tachisuberihiyu)));
+
+
+    // Tsuruna
+    map.insert(TsurunaGenus::Tsuruna.name(), Vegetable::NadeshikoFamily(NadeshikoFamily::Tsuruna(TsurunaGenus::Tsuruna)));
+
+
+    // Tsurumurasaki
+    map.insert(TsurumurasakiGenus::Tsurumurasaki.name(), Vegetable::NadeshikoFamily(NadeshikoFamily::Tsurumurasaki(TsurumurasakiGenus::Tsurumurasaki)));
+
+
+    // Hiyu
+    map.insert(HiyuGenus::Amaransasu.name(), Vegetable::NadeshikoFamily(NadeshikoFamily::Hiyu(HiyuGenus::Amaransasu)));
+    map.insert(HiyuGenus::Hiyu.name(), Vegetable::NadeshikoFamily(NadeshikoFamily::Hiyu(HiyuGenus::Hiyu)));
 
 
     map
