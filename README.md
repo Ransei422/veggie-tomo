@@ -65,4 +65,17 @@ curl -X POST http://localhost:3000/api/check_registered_vegetable \
     -H "Authorization: Bearer <JWT_TOKEN_YOU_GOT>" \
     -H "Content-Type: application/json" \
     -d '{"name": "オクラ"}'
+
+
+
+<!-- Register relationship between existing vegetables -->
+<!-- compatibility: 0-> no-effect / 1-> good/ 2-> bad -->
+curl -X POST http://localhost:3000/api/register_vegetable_relationship \
+    -H "Authorization: Bearer <JWT_TOKEN_YOU_GOT>" \
+    -H "Content-Type: application/json" \
+    -d '{"vegetable_1_name": "セリ",
+        "vegetable_2_name": "オクラ",
+        "compatibility": 0,
+        "explanation": "<SOME EXPLANATION>"
+        }'
 ```
