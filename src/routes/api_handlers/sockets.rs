@@ -14,12 +14,13 @@ use super::utils;
 
 
 #[derive(Deserialize)]
-pub struct VegetableNameJson {
+pub struct VegetableNameJsonRequest {
     name: String,
 }
 
+
 #[derive(Deserialize)]
-pub struct VegetableFamilyJson {
+pub struct VegetableFamilyJsonRequest {
     family_name: String,
 }
 
@@ -33,7 +34,7 @@ pub struct VegetableRelationJson {
 }
 
 
-#[derive(Debug, FromRow, Serialize)]
+#[derive(FromRow, Serialize)]
 pub struct VegetableData {
     pub id: i32,
     pub vegetable_name: String,
@@ -42,7 +43,7 @@ pub struct VegetableData {
 }
 
 
-#[derive(Debug, FromRow, Serialize)]
+#[derive(Serialize)]
 pub struct AvailableData<'a> {
     pub id: usize,
     pub vegetable_name: &'a str,
@@ -51,11 +52,20 @@ pub struct AvailableData<'a> {
 }
 
 
+#[derive(Serialize)]
+pub struct ApiResponse<T: Serialize> {
+    pub status_code: String,
+    pub status_answer: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data: Option<T>,
+}
+
+
 
 // Register data from relations.rs to DB based on user's input
 pub async fn register_vegetables(app_state: State<Arc<AppState>>,
-                                Json(data): Json<VegetableNameJson>)
-                                -> Json<Value> {
+    Json(data): Json<VegetableNameJsonRequest>)
+    ->  Json<ApiResponse<Value>> {
     if let Some(veg) = search_by_name(&data.name) {
         let result = utils::register_vegetable_to_db(&app_state, veg)
         .await;
@@ -64,33 +74,51 @@ pub async fn register_vegetables(app_state: State<Arc<AppState>>,
             Ok(_) => {
                 let answer = answers::ApiAnswers::new(
                     answers::ApiAnswersEnum::Answer1);
-                return json!({
-                    "status_code": answer.code.as_str(),
-                    "status_answer":answer.message}).into()
+
+                let response = ApiResponse {
+                    status_code: answer.code.to_string(),
+                    status_answer: answer.message,
+                    data: None,
+                
+                };
+
+                return Json(response);
             },
 
             Err(_err) => {
                 let answer = answers::ApiAnswers::new(
                     answers::ApiAnswersEnum::Answer2);
-                    return json!({
-                        "status_code": answer.code.as_str(),
-                        "status_answer":answer.message}).into()
+
+                let response = ApiResponse {
+                    status_code: answer.code.to_string(),
+                    status_answer: answer.message,
+                    data: None,
+                };
+
+                return Json(response);
             }
         }
 
     } else {
         let answer = answers::ApiAnswers::new(
             answers::ApiAnswersEnum::Answer3);
-            return json!({
-                "status_code": answer.code.as_str(),
-                "status_answer":answer.message}).into()
+
+        let response = ApiResponse {
+            status_code: answer.code.to_string(),
+            status_answer: answer.message,
+            data: None,
+        };
+
+        return Json(response);
     }
 }
 
 
 
 // Check if vegetable already exists in DB 
-pub async fn check_registered_vegetable(app_state: State<Arc<AppState>>, Json(data): Json<VegetableNameJson>) -> Json<Value> {
+pub async fn check_registered_vegetable(app_state: State<Arc<AppState>>,
+    Json(data): Json<VegetableNameJsonRequest>) 
+    -> Json<ApiResponse<Value>> {
     let result = utils::search_registered(&app_state, &data.name).await;
 
     match result {
@@ -99,25 +127,34 @@ pub async fn check_registered_vegetable(app_state: State<Arc<AppState>>, Json(da
             let answer = answers::ApiAnswers::new(
                 answers::ApiAnswersEnum::Answer4);
 
-            return json!({
-                    "status_code": answer.code.to_string(),
-                    "status_answer": answer.message,
+            let response = ApiResponse {
+                status_code: answer.code.to_string(),
+                status_answer: answer.message,
+                data: Some(json!({
                     "vegetable_name": veg.vegetable_name,
                     "vegetable_family": veg.vegetable_family,
-                    "vegetable_species": veg.vegetable_species
-            }).into()
+                    "vegetable_species": veg.vegetable_species,
+                })),
+            };
+
+            return Json(response);
         },
+
         Err(_) => {
             let answer = answers::ApiAnswers::new(
                 answers::ApiAnswersEnum::Answer5);
 
-            return json!({
-                    "status_code": answer.code.to_string(),
-                    "status_answer": answer.message,
+            let response = ApiResponse {
+                status_code: answer.code.to_string(),
+                status_answer: answer.message,
+                data: Some(json!({
                     "vegetable_name": "",
                     "vegetable_family": "",
-                    "vegetable_species": ""
-            }).into()
+                    "vegetable_species": "",
+                })),
+            };
+
+            return Json(response);
         }
     }
 }
@@ -125,18 +162,24 @@ pub async fn check_registered_vegetable(app_state: State<Arc<AppState>>, Json(da
 
 
 // Check if vegetable is registerable by it's family name
-pub async fn check_available_vegetable(Json(data): Json<VegetableFamilyJson>) -> Json<Value> {
+pub async fn check_available_vegetable(Json(data): Json<VegetableFamilyJsonRequest>)
+    -> Json<ApiResponse<Value>> {
     let family_name = data.family_name;
     let result = search_by_family(&family_name);
 
     if result.len() == 0 {
         let answer = answers::ApiAnswers::new(
             answers::ApiAnswersEnum::Answer6);
-        return json!({
-                "status_code": answer.code.to_string(),
-                "status_answer": answer.message,
-                "vegetable_list": ""
-        }).into()
+
+        let response = ApiResponse {
+            status_code: answer.code.to_string(),
+            status_answer: answer.message,
+            data: Some(json!({
+                "vegetable_list": "",
+            })),
+        };
+
+        return Json(response);
 
     } else {
         let answer = answers::ApiAnswers::new(
@@ -153,11 +196,15 @@ pub async fn check_available_vegetable(Json(data): Json<VegetableFamilyJson>) ->
             veg_list.push(d);
         }
 
-        return json!({
-                "status_code": answer.code.to_string(),
-                "status_answer": answer.message,
-                "vegetable_list": veg_list
-        }).into()
+        let response = ApiResponse {
+            status_code: answer.code.to_string(),
+            status_answer: answer.message,
+            data: Some(json!({
+                "vegetable_list": veg_list,
+            })),
+        };
+        return Json(response);
+
     }
 }
 
@@ -166,12 +213,10 @@ pub async fn check_available_vegetable(Json(data): Json<VegetableFamilyJson>) ->
 // Register relations between vegetables
 pub async fn register_relationship(app_state: State<Arc<AppState>>,
     Json(data): Json<VegetableRelationJson>) 
-    -> Json<Value> {
+    -> Json<ApiResponse<Value>> {
 
         let vegetable1 = data.vegetable_1_name;
         let vegetable2 = data.vegetable_2_name;
-
-        
 
         let vegetable_1_id = utils::search_registered(
             &app_state, &vegetable1).await;
@@ -181,11 +226,16 @@ pub async fn register_relationship(app_state: State<Arc<AppState>>,
             Err(_) => {
                 let answer = answers::ApiAnswers::new(
                     answers::ApiAnswersEnum::Answer5);
-    
-                return json!({
-                        "status_code": answer.code.to_string(),
-                        "status_answer": answer.message,
-                }).into()
+
+                let response = ApiResponse {
+                    status_code: answer.code.to_string(),
+                    status_answer: answer.message,
+                    data: Some(json!({
+                        "data_affected": 0
+                    })),
+                };
+        
+                return Json(response);
             }
         };
         
@@ -198,11 +248,16 @@ pub async fn register_relationship(app_state: State<Arc<AppState>>,
             Err(_) => {
                 let answer = answers::ApiAnswers::new(
                     answers::ApiAnswersEnum::Answer5);
-    
-                return json!({
-                        "status_code": answer.code.to_string(),
-                        "status_answer": answer.message,
-                }).into()
+                
+                let response = ApiResponse {
+                    status_code: answer.code.to_string(),
+                    status_answer: answer.message,
+                    data: Some(json!({
+                        "data_affected": 0
+                    })),
+                };
+        
+                return Json(response);
             }
         };
 
@@ -212,24 +267,34 @@ pub async fn register_relationship(app_state: State<Arc<AppState>>,
 
 
         match registration_result {
-            Ok(_) => {
+            Ok(e) => {
                 let answer = answers::ApiAnswers::new(
                     answers::ApiAnswersEnum::Answer1);
-    
-                return json!({
-                        "status_code": answer.code.to_string(),
-                        "status_answer": answer.message,
-                }).into()
+
+                let response = ApiResponse {
+                    status_code: answer.code.to_string(),
+                    status_answer: answer.message,
+                    data: Some(json!({
+                        "data_affected": e.rows_affected()
+                    })),
+                };
+        
+                return Json(response);
             },
 
             Err(_) => {
                 let answer = answers::ApiAnswers::new(
                     answers::ApiAnswersEnum::Answer6);
 
-                return json!({
-                    "status_code": answer.code.to_string(),
-                    "status_answer": answer.message,
-            }).into()
+                let response = ApiResponse {
+                    status_code: answer.code.to_string(),
+                    status_answer: answer.message,
+                    data: Some(json!({
+                        "data_affected": 0
+                    })),
+                };
+        
+                return Json(response);
             }
         }
 }

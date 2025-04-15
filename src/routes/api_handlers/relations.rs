@@ -37,10 +37,10 @@ pub enum Vegetable {
     SeriFamily(SeriFamily),
     TadeFamily(TadeFamily),
     NadeshikoFamily(NadeshikoFamily),
-    // BaraFamily(BaraFamily),
-    // FuuchousouFamily(FuuchousouFamily),
-    // FuurosouFamily(FuurosouFamily),
-    // FutomomoFamily(FutomomoFamily),
+    BaraFamily(BaraFamily),
+    FuuchousouFamily(FuuchousouFamily),
+    FuurosouFamily(FuurosouFamily),
+    FutomomoFamily(FutomomoFamily),
     // MameFamily(MameFamily),
     // MukuroshiFamily(MukuroshiFamily),
     // KikuFamily(KikuFamily),
@@ -93,6 +93,7 @@ pub enum TadeFamily {
     Tade(TadeGenus),
 }
 
+
 #[derive(Debug, Clone)]
 pub enum NadeshikoFamily {
     Akaza(AkazaGenus),
@@ -101,6 +102,35 @@ pub enum NadeshikoFamily {
     Tsurumurasaki(TsurumurasakiGenus),
     Hiyu(HiyuGenus),
 }
+
+
+#[derive(Debug, Clone)]
+pub enum BaraFamily {
+    Bara(BaraGenus),
+}
+
+
+#[derive(Debug, Clone)]
+pub enum FuuchousouFamily {
+    Aburana(AburanaGenus),
+}
+
+
+#[derive(Debug, Clone)]
+pub enum FuurosouFamily {
+    Nouzenharen(NouzenharenGenus),
+}
+
+
+#[derive(Debug, Clone)]
+pub enum FutomomoFamily {
+    Hishi(HishiGenus),
+}
+
+
+
+
+
 
 
 // Genus ----------------------------------------------------------------
@@ -233,7 +263,64 @@ pub enum HiyuGenus {
 }
 
 
+#[derive(Debug, Clone)]
+pub enum BaraGenus {
+    Ichigo,
+    Saradabaanetto,
+    WairudoSutoroberii,
+}
 
+
+#[derive(Debug, Clone)]
+pub enum AburanaGenus {
+    Aburana,
+    Oosakashirona,
+    Kiren,
+    Kabu,
+    Karashina,
+    Karifurawaa,
+    Kyabetsu,
+    Kureson,
+    Keeru,
+    Koorurabi,
+    Kousaitai,
+    Koshousou,
+    Komatsuna,
+    Sugukina,
+    Tasai,
+    Daikon,
+    Taisai,
+    Daishinsai,
+    Takana,
+    Tanikutakana,
+    Chingensai,
+    Nozawana,
+    Hakusai,
+    Hukuran,
+    Hatsukadikon,
+    Hamana,
+    PuchiVeeru,
+    Burokkorii,
+    Mizuna,
+    Mibuna,
+    Mekyabetsu,
+    Rutabaga,
+    Rukkora,
+    Wasabi,
+    Wasabidakon,
+}
+
+
+#[derive(Debug, Clone)]
+pub enum NouzenharenGenus {
+    Kinrenka,
+}
+
+
+#[derive(Debug, Clone)]
+pub enum HishiGenus {
+    Hishi,
+}
 
 
 
@@ -409,6 +496,80 @@ impl VegMetadata for HiyuGenus {
 
 
 
+impl VegMetadata for BaraGenus {
+    fn name(&self) -> &'static str {
+        match self {
+            BaraGenus::Ichigo => "イチゴ",
+            BaraGenus::Saradabaanetto => "サラダバーネット",
+            BaraGenus::WairudoSutoroberii => "ワイルドストロベリー",
+        }
+    }
+    fn genus(&self) -> &'static str { "バラ" }
+    fn family(&self) -> &'static str { "バラ" }
+}
+
+
+
+impl VegMetadata for AburanaGenus {
+    fn name(&self) -> &'static str {
+        match self {
+            AburanaGenus::Aburana => "アブラナ",
+            AburanaGenus::Oosakashirona => "オーサカシロナ",
+            AburanaGenus::Kiren => "キレン",
+            AburanaGenus::Kabu => "カブ",
+            AburanaGenus::Karashina => "カラシナ",
+            AburanaGenus::Karifurawaa => "カリフラワー",
+            AburanaGenus::Kyabetsu => "キャベツ",
+            AburanaGenus::Kureson => "クレソン",
+            AburanaGenus::Keeru => "ケール",
+            AburanaGenus::Koorurabi => "コールラビ",
+            AburanaGenus::Kousaitai => "コウサイタイ",
+            AburanaGenus::Koshousou => "コーショウソウ",
+            AburanaGenus::Komatsuna => "コマツナ",
+            AburanaGenus::Sugukina => "スグキナ",
+            AburanaGenus::Tasai => "ターサイ",
+            AburanaGenus::Daikon => "ダイコン",
+            AburanaGenus::Taisai => "タイサイ",
+            AburanaGenus::Daishinsai => "ダイシンサイ",
+            AburanaGenus::Takana => "タカナ",
+            AburanaGenus::Tanikutakana => "タニクタカナ",
+            AburanaGenus::Chingensai => "チンゲンサイ",
+            AburanaGenus::Nozawana => "ノザワナ",
+            AburanaGenus::Hakusai => "ハクサイ",
+            AburanaGenus::Hukuran => "ハクラン",
+            AburanaGenus::Hatsukadikon => "ハツカダイコン",
+            AburanaGenus::Hamana => "ハマナ",
+            AburanaGenus::PuchiVeeru => "プチヴェール",
+            AburanaGenus::Burokkorii => "ブロッコリー",
+            AburanaGenus::Mizuna => "ミズナ",
+            AburanaGenus::Mibuna => "ミブナ",
+            AburanaGenus::Mekyabetsu => "メキャベツ",
+            AburanaGenus::Rutabaga => "ルタバガ",
+            AburanaGenus::Rukkora => "ルッコラ",
+            AburanaGenus::Wasabi => "ワサビ",
+            AburanaGenus::Wasabidakon => "ワサビダイコン",
+        }
+    }
+    fn genus(&self) -> &'static str { "アブラナ" }
+    fn family(&self) -> &'static str { "フウチョウソウ" }
+}
+
+
+
+impl VegMetadata for NouzenharenGenus {
+    fn name(&self) -> &'static str { "キンレンカ" }
+    fn genus(&self) -> &'static str { "ノウゼンハレン" }
+    fn family(&self) -> &'static str { "フウロソウ" }
+}
+
+
+
+impl VegMetadata for HishiGenus {
+    fn name(&self) -> &'static str { "ヒシ" }
+    fn genus(&self) -> &'static str { "ヒシ" }
+    fn family(&self) -> &'static str { "フトモモ" }
+}
+
 
 
 
@@ -500,6 +661,30 @@ impl Vegetable {
             },
 
             Vegetable::NadeshikoFamily(NadeshikoFamily::Hiyu(genus)) => VegMeta {
+                name: genus.name(),
+                genus: genus.genus(),
+                family: genus.family(),
+            },
+
+            Vegetable::BaraFamily(BaraFamily::Bara(genus)) => VegMeta {
+                name: genus.name(),
+                genus: genus.genus(),
+                family: genus.family(),
+            },
+
+            Vegetable::FuuchousouFamily(FuuchousouFamily::Aburana(genus)) => VegMeta {
+                name: genus.name(),
+                genus: genus.genus(),
+                family: genus.family(),
+            },
+
+            Vegetable::FuurosouFamily(FuurosouFamily::Nouzenharen(genus)) => VegMeta {
+                name: genus.name(),
+                genus: genus.genus(),
+                family: genus.family(),
+            },
+
+            Vegetable::FutomomoFamily(FutomomoFamily::Hishi(genus)) => VegMeta {
                 name: genus.name(),
                 genus: genus.genus(),
                 family: genus.family(),
@@ -615,6 +800,57 @@ pub static VEGETABLE_LOOKUP: Lazy<HashMap<&'static str, Vegetable>> = Lazy::new(
     map.insert(HiyuGenus::Amaransasu.name(), Vegetable::NadeshikoFamily(NadeshikoFamily::Hiyu(HiyuGenus::Amaransasu)));
     map.insert(HiyuGenus::Hiyu.name(), Vegetable::NadeshikoFamily(NadeshikoFamily::Hiyu(HiyuGenus::Hiyu)));
 
+
+    // Bara
+    map.insert(BaraGenus::Ichigo.name(), Vegetable::BaraFamily(BaraFamily::Bara(BaraGenus::Ichigo)));
+    map.insert(BaraGenus::Saradabaanetto.name(), Vegetable::BaraFamily(BaraFamily::Bara(BaraGenus::Saradabaanetto)));
+    map.insert(BaraGenus::WairudoSutoroberii.name(), Vegetable::BaraFamily(BaraFamily::Bara(BaraGenus::WairudoSutoroberii)));
+
+
+    // Aburana
+    map.insert(AburanaGenus::Aburana.name(), Vegetable::FuuchousouFamily(FuuchousouFamily::Aburana(AburanaGenus::Aburana)));
+    map.insert(AburanaGenus::Oosakashirona.name(), Vegetable::FuuchousouFamily(FuuchousouFamily::Aburana(AburanaGenus::Oosakashirona)));
+    map.insert(AburanaGenus::Kiren.name(), Vegetable::FuuchousouFamily(FuuchousouFamily::Aburana(AburanaGenus::Kiren)));
+    map.insert(AburanaGenus::Kabu.name(), Vegetable::FuuchousouFamily(FuuchousouFamily::Aburana(AburanaGenus::Kabu)));
+    map.insert(AburanaGenus::Karashina.name(), Vegetable::FuuchousouFamily(FuuchousouFamily::Aburana(AburanaGenus::Karashina)));
+    map.insert(AburanaGenus::Karifurawaa.name(), Vegetable::FuuchousouFamily(FuuchousouFamily::Aburana(AburanaGenus::Karifurawaa)));
+    map.insert(AburanaGenus::Kyabetsu.name(), Vegetable::FuuchousouFamily(FuuchousouFamily::Aburana(AburanaGenus::Kyabetsu)));
+    map.insert(AburanaGenus::Kureson.name(), Vegetable::FuuchousouFamily(FuuchousouFamily::Aburana(AburanaGenus::Kureson)));
+    map.insert(AburanaGenus::Keeru.name(), Vegetable::FuuchousouFamily(FuuchousouFamily::Aburana(AburanaGenus::Keeru)));
+    map.insert(AburanaGenus::Koorurabi.name(), Vegetable::FuuchousouFamily(FuuchousouFamily::Aburana(AburanaGenus::Koorurabi)));
+    map.insert(AburanaGenus::Kousaitai.name(), Vegetable::FuuchousouFamily(FuuchousouFamily::Aburana(AburanaGenus::Kousaitai)));
+    map.insert(AburanaGenus::Koshousou.name(), Vegetable::FuuchousouFamily(FuuchousouFamily::Aburana(AburanaGenus::Koshousou)));
+    map.insert(AburanaGenus::Komatsuna.name(), Vegetable::FuuchousouFamily(FuuchousouFamily::Aburana(AburanaGenus::Komatsuna)));
+    map.insert(AburanaGenus::Sugukina.name(), Vegetable::FuuchousouFamily(FuuchousouFamily::Aburana(AburanaGenus::Sugukina)));
+    map.insert(AburanaGenus::Tasai.name(), Vegetable::FuuchousouFamily(FuuchousouFamily::Aburana(AburanaGenus::Tasai)));
+    map.insert(AburanaGenus::Daikon.name(), Vegetable::FuuchousouFamily(FuuchousouFamily::Aburana(AburanaGenus::Daikon)));
+    map.insert(AburanaGenus::Taisai.name(), Vegetable::FuuchousouFamily(FuuchousouFamily::Aburana(AburanaGenus::Taisai)));
+    map.insert(AburanaGenus::Daishinsai.name(), Vegetable::FuuchousouFamily(FuuchousouFamily::Aburana(AburanaGenus::Daishinsai)));
+    map.insert(AburanaGenus::Takana.name(), Vegetable::FuuchousouFamily(FuuchousouFamily::Aburana(AburanaGenus::Takana)));
+    map.insert(AburanaGenus::Tanikutakana.name(), Vegetable::FuuchousouFamily(FuuchousouFamily::Aburana(AburanaGenus::Tanikutakana)));
+    map.insert(AburanaGenus::Chingensai.name(), Vegetable::FuuchousouFamily(FuuchousouFamily::Aburana(AburanaGenus::Chingensai)));
+    map.insert(AburanaGenus::Nozawana.name(), Vegetable::FuuchousouFamily(FuuchousouFamily::Aburana(AburanaGenus::Nozawana)));
+    map.insert(AburanaGenus::Hakusai.name(), Vegetable::FuuchousouFamily(FuuchousouFamily::Aburana(AburanaGenus::Hakusai)));
+    map.insert(AburanaGenus::Hukuran.name(), Vegetable::FuuchousouFamily(FuuchousouFamily::Aburana(AburanaGenus::Hukuran)));
+    map.insert(AburanaGenus::Hatsukadikon.name(), Vegetable::FuuchousouFamily(FuuchousouFamily::Aburana(AburanaGenus::Hatsukadikon)));
+    map.insert(AburanaGenus::Hamana.name(), Vegetable::FuuchousouFamily(FuuchousouFamily::Aburana(AburanaGenus::Hamana)));
+    map.insert(AburanaGenus::PuchiVeeru.name(), Vegetable::FuuchousouFamily(FuuchousouFamily::Aburana(AburanaGenus::PuchiVeeru)));
+    map.insert(AburanaGenus::Burokkorii.name(), Vegetable::FuuchousouFamily(FuuchousouFamily::Aburana(AburanaGenus::Burokkorii)));
+    map.insert(AburanaGenus::Mizuna.name(), Vegetable::FuuchousouFamily(FuuchousouFamily::Aburana(AburanaGenus::Mizuna)));
+    map.insert(AburanaGenus::Mibuna.name(), Vegetable::FuuchousouFamily(FuuchousouFamily::Aburana(AburanaGenus::Mibuna)));
+    map.insert(AburanaGenus::Mekyabetsu.name(), Vegetable::FuuchousouFamily(FuuchousouFamily::Aburana(AburanaGenus::Mekyabetsu)));
+    map.insert(AburanaGenus::Rutabaga.name(), Vegetable::FuuchousouFamily(FuuchousouFamily::Aburana(AburanaGenus::Rutabaga)));
+    map.insert(AburanaGenus::Rukkora.name(), Vegetable::FuuchousouFamily(FuuchousouFamily::Aburana(AburanaGenus::Rukkora)));
+    map.insert(AburanaGenus::Wasabi.name(), Vegetable::FuuchousouFamily(FuuchousouFamily::Aburana(AburanaGenus::Wasabi)));
+    map.insert(AburanaGenus::Wasabidakon.name(), Vegetable::FuuchousouFamily(FuuchousouFamily::Aburana(AburanaGenus::Wasabidakon)));
+
+
+    // Nouzenharen
+    map.insert(NouzenharenGenus::Kinrenka.name(), Vegetable::FuurosouFamily(FuurosouFamily::Nouzenharen(NouzenharenGenus::Kinrenka)));
+
+    
+    // Hishi
+    map.insert(HishiGenus::Hishi.name(), Vegetable::FutomomoFamily(FutomomoFamily::Hishi(HishiGenus::Hishi)));
 
     map
 });
