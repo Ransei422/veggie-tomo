@@ -41,11 +41,11 @@ pub enum Vegetable {
     FuuchousouFamily(FuuchousouFamily),
     FuurosouFamily(FuurosouFamily),
     FutomomoFamily(FutomomoFamily),
-    // MameFamily(MameFamily),
-    // MukuroshiFamily(MukuroshiFamily),
-    // KikuFamily(KikuFamily),
-    // GomanohagusaFamily(GomanohagusaFamily),
-    // ShisoFamily(ShisoFamily),
+    MameFamily(MameFamily),
+    MukurojiFamily(MukurojiFamily),
+    KikuFamily(KikuFamily),
+    GomanohagusaFamily(GomanohagusaFamily),
+    ShisoFamily(ShisoFamily),
     // NasuFamily(NasuFamily),
     // OmodakaFamily(OmodakaFamily),
     // KayatsurigusaFamily(KayatsurigusaFamily),
@@ -128,8 +128,35 @@ pub enum FutomomoFamily {
 }
 
 
+#[derive(Debug, Clone)]
+pub enum MameFamily {
+    Mame(MameGenus),
+}
 
 
+#[derive(Debug, Clone)]
+pub enum MukurojiFamily {
+    Mikan(MikanGenus),
+}
+
+
+#[derive(Debug, Clone)]
+pub enum KikuFamily {
+    Kiku(KikuGenus),
+}
+
+
+#[derive(Debug, Clone)]
+pub enum GomanohagusaFamily {
+    Goma(GomaGenus),
+}
+
+
+#[derive(Debug, Clone)]
+pub enum ShisoFamily {
+    Shiso(ShisoGenus),
+    Murasaki(MurasakiGenus)
+}
 
 
 
@@ -321,6 +348,108 @@ pub enum NouzenharenGenus {
 pub enum HishiGenus {
     Hishi,
 }
+
+
+#[derive(Debug, Clone)]
+pub enum MameGenus {
+    Azuki,
+    Amerikahodoimo,
+    Ingenmame,
+    Endou,
+    Sasage,
+    Shikakumame,
+    Juurokusasage,
+    Soramame,
+    Daizu,
+    Tachinatamame,
+    Choumame,
+    Natamame,
+    Nantenhagi,
+    Hasshoumame,
+    Hiyokomame,
+    Hiramame,
+    Fujimame,
+    Benibanaingen,
+    Raimabiin,
+    Rakkasei,
+    Ryokutou,
+}
+
+
+
+#[derive(Debug, Clone)]
+pub enum MikanGenus {
+    Sanshou,
+    Henruuda,
+}
+
+
+#[derive(Debug, Clone)]
+pub enum KikuGenus {
+    Aatichooku,
+    Endaibu,
+    Orandasennichi,
+    Kakijisha,
+    Kamomiiru,
+    Karudon,
+    Kareepuranto,
+    Kiku,
+    Kikuimo,
+    Gobou,
+    Sarushifai,
+    Sanchu,
+    Shungiku,
+    Shokuyoutanpopo,
+    Suizenjina,
+    Sutebia,
+    Tachijisha,
+    Chikori,
+    Chisha,
+    Tsuwabuki,
+    Torebisu,
+    Fuki,
+    Yamagobou,
+    Riifuretasu,
+    Retasu,
+}
+
+
+#[derive(Debug, Clone)]
+pub enum GomaGenus {
+    Goma,
+}
+
+
+#[derive(Debug, Clone)]
+pub enum ShisoGenus {
+    Appuruminto,
+    Uintaasaborii,
+    Egoma,
+    Oregano,
+    Shiso,
+    Supearaminto,
+    Seiji,
+    Taimu,
+    Chorogi,
+    Numahakka,
+    Painappuruminto,
+    Hakka,
+    Bajiru,
+    Pepaminto,
+    Majoramu,
+    Rabendaa,
+    Remontaimu,
+    Remonbaamu,
+    Roozumarii
+}
+
+
+#[derive(Debug, Clone)]
+pub enum MurasakiGenus {
+    Konfurii,
+}
+
+
 
 
 
@@ -572,6 +701,133 @@ impl VegMetadata for HishiGenus {
 
 
 
+impl VegMetadata for MameGenus {
+    fn name(&self) -> &'static str {
+        match self {
+            MameGenus::Azuki => "アズキ",
+            MameGenus::Amerikahodoimo => "アメリカホドイモ",
+            MameGenus::Ingenmame => "インゲンマメ",
+            MameGenus::Endou => "エンドウ",
+            MameGenus::Sasage => "ササゲ",
+            MameGenus::Shikakumame => "シカクマメ",
+            MameGenus::Juurokusasage => "ジュウロクササゲ",
+            MameGenus::Soramame => "ソラマメ",
+            MameGenus::Daizu => "ダイズ",
+            MameGenus::Tachinatamame => "タチナタマメ",
+            MameGenus::Choumame => "チョウマメ",
+            MameGenus::Natamame => "ナタマメ",
+            MameGenus::Nantenhagi => "ナンテンハギ",
+            MameGenus::Hasshoumame => "ハッショウマメ",
+            MameGenus::Hiyokomame => "ヒヨコマメ",
+            MameGenus::Hiramame => "ヒラマメ",
+            MameGenus::Fujimame => "フジマメ",
+            MameGenus::Benibanaingen => "ベニバナインゲン",
+            MameGenus::Raimabiin => "ライマビーン",
+            MameGenus::Rakkasei => "ラッカセイ",
+            MameGenus::Ryokutou => "リョクトウ",
+        }
+    }
+    fn genus(&self) -> &'static str { "マメ" }
+    fn family(&self) -> &'static str { "マメ" }
+}
+
+
+
+impl VegMetadata for MikanGenus {
+    fn name(&self) -> &'static str {
+        match self {
+            MikanGenus::Sanshou => "サンショウ",
+            MikanGenus::Henruuda => "ヘンルーダ",
+        }
+    }
+    fn genus(&self) -> &'static str { "ミカン" }
+    fn family(&self) -> &'static str { "ムクロジ" }
+}
+
+
+
+impl VegMetadata for KikuGenus {
+    fn name(&self) -> &'static str {
+        match self {
+            KikuGenus::Aatichooku => "アーティチョーク",
+            KikuGenus::Endaibu => "エンダイブ",
+            KikuGenus::Orandasennichi => "オランダセンニチ",
+            KikuGenus::Kakijisha => "カキヂシャ",
+            KikuGenus::Kamomiiru => "カモミール",
+            KikuGenus::Karudon => "カルドン",
+            KikuGenus::Kareepuranto => "カレープラント",
+            KikuGenus::Kiku => "キク",
+            KikuGenus::Kikuimo => "キクイモ",
+            KikuGenus::Gobou => "ゴボウ",
+            KikuGenus::Sarushifai => "サルシファイ",
+            KikuGenus::Sanchu => "サンチュ",
+            KikuGenus::Shungiku => "シュンギク",
+            KikuGenus::Shokuyoutanpopo => "ショクヨウタンポポ",
+            KikuGenus::Suizenjina => "スイゼンジナ",
+            KikuGenus::Sutebia => "ステビア",
+            KikuGenus::Tachijisha => "タチヂシャ",
+            KikuGenus::Chikori => "チコリ",
+            KikuGenus::Chisha => "チシャ",
+            KikuGenus::Tsuwabuki => "ツワブキ",
+            KikuGenus::Torebisu => "トレビス",
+            KikuGenus::Fuki => "フキ",
+            KikuGenus::Yamagobou => "ヤマゴボウ",
+            KikuGenus::Riifuretasu => "リーフレタス",
+            KikuGenus::Retasu => "レタス",
+        }
+    }
+    fn genus(&self) -> &'static str { "キク" }
+    fn family(&self) -> &'static str { "キク" }
+}
+
+
+
+impl VegMetadata for GomaGenus {
+    fn name(&self) -> &'static str { "ゴマ" }
+    fn genus(&self) -> &'static str { "ゴマ" }
+    fn family(&self) -> &'static str { "ゴマノハグサ" }
+}
+
+
+impl VegMetadata for ShisoGenus {
+    fn name(&self) -> &'static str {
+        match self {
+            ShisoGenus::Appuruminto => "アップルミント",
+            ShisoGenus::Uintaasaborii => "ウィンターサボリー",
+            ShisoGenus::Egoma => "エゴマ",
+            ShisoGenus::Oregano => "オレガノ",
+            ShisoGenus::Shiso => "シソ",
+            ShisoGenus::Supearaminto => "スペアミント",
+            ShisoGenus::Seiji => "セージ",
+            ShisoGenus::Taimu => "タイム",
+            ShisoGenus::Chorogi => "チョロギ",
+            ShisoGenus::Numahakka => "ヌマハッカ",
+            ShisoGenus::Painappuruminto => "パイナップルミント",
+            ShisoGenus::Hakka => "ハッカ",
+            ShisoGenus::Bajiru => "バジル",
+            ShisoGenus::Pepaminto => "ペパーミント",
+            ShisoGenus::Majoramu => "マジョラム",
+            ShisoGenus::Rabendaa => "ラベンダー",
+            ShisoGenus::Remontaimu => "レモンタイム",
+            ShisoGenus::Remonbaamu => "レモンバーム",
+            ShisoGenus::Roozumarii => "ローズマリー",
+        
+        }
+    }
+    fn genus(&self) -> &'static str { "シソ" }
+    fn family(&self) -> &'static str { "シソ" }
+}
+
+
+impl VegMetadata for MurasakiGenus {
+    fn name(&self) -> &'static str { "コンフリー" }
+    fn genus(&self) -> &'static str { "ムラサキ" }
+    fn family(&self) -> &'static str { "シソ" }
+}
+
+
+
+
 
 
 
@@ -685,6 +941,42 @@ impl Vegetable {
             },
 
             Vegetable::FutomomoFamily(FutomomoFamily::Hishi(genus)) => VegMeta {
+                name: genus.name(),
+                genus: genus.genus(),
+                family: genus.family(),
+            },
+
+            Vegetable::MameFamily(MameFamily::Mame(genus)) => VegMeta {
+                name: genus.name(),
+                genus: genus.genus(),
+                family: genus.family(),
+            },
+
+            Vegetable::MukurojiFamily(MukurojiFamily::Mikan(genus)) => VegMeta {
+                name: genus.name(),
+                genus: genus.genus(),
+                family: genus.family(),
+            },
+
+            Vegetable::KikuFamily(KikuFamily::Kiku(genus)) => VegMeta {
+                name: genus.name(),
+                genus: genus.genus(),
+                family: genus.family(),
+            },
+
+            Vegetable::GomanohagusaFamily(GomanohagusaFamily::Goma(genus)) => VegMeta {
+                name: genus.name(),
+                genus: genus.genus(),
+                family: genus.family(),
+            },
+
+            Vegetable::ShisoFamily(ShisoFamily::Shiso(genus)) => VegMeta {
+                name: genus.name(),
+                genus: genus.genus(),
+                family: genus.family(),
+            },
+
+            Vegetable::ShisoFamily(ShisoFamily::Murasaki(genus)) => VegMeta {
                 name: genus.name(),
                 genus: genus.genus(),
                 family: genus.family(),
@@ -851,6 +1143,89 @@ pub static VEGETABLE_LOOKUP: Lazy<HashMap<&'static str, Vegetable>> = Lazy::new(
     
     // Hishi
     map.insert(HishiGenus::Hishi.name(), Vegetable::FutomomoFamily(FutomomoFamily::Hishi(HishiGenus::Hishi)));
+
+    // Mame 
+    map.insert(MameGenus::Azuki.name(), Vegetable::MameFamily(MameFamily::Mame(MameGenus::Azuki)));
+    map.insert(MameGenus::Amerikahodoimo.name(), Vegetable::MameFamily(MameFamily::Mame(MameGenus::Amerikahodoimo)));
+    map.insert(MameGenus::Ingenmame.name(), Vegetable::MameFamily(MameFamily::Mame(MameGenus::Ingenmame)));
+    map.insert(MameGenus::Endou.name(), Vegetable::MameFamily(MameFamily::Mame(MameGenus::Endou)));
+    map.insert(MameGenus::Sasage.name(), Vegetable::MameFamily(MameFamily::Mame(MameGenus::Sasage)));
+    map.insert(MameGenus::Shikakumame.name(), Vegetable::MameFamily(MameFamily::Mame(MameGenus::Shikakumame)));
+    map.insert(MameGenus::Juurokusasage.name(), Vegetable::MameFamily(MameFamily::Mame(MameGenus::Juurokusasage)));
+    map.insert(MameGenus::Soramame.name(), Vegetable::MameFamily(MameFamily::Mame(MameGenus::Soramame)));
+    map.insert(MameGenus::Daizu.name(), Vegetable::MameFamily(MameFamily::Mame(MameGenus::Daizu)));
+    map.insert(MameGenus::Tachinatamame.name(), Vegetable::MameFamily(MameFamily::Mame(MameGenus::Tachinatamame)));
+    map.insert(MameGenus::Choumame.name(), Vegetable::MameFamily(MameFamily::Mame(MameGenus::Choumame)));
+    map.insert(MameGenus::Natamame.name(), Vegetable::MameFamily(MameFamily::Mame(MameGenus::Natamame)));
+    map.insert(MameGenus::Nantenhagi.name(), Vegetable::MameFamily(MameFamily::Mame(MameGenus::Nantenhagi)));
+    map.insert(MameGenus::Hasshoumame.name(), Vegetable::MameFamily(MameFamily::Mame(MameGenus::Hasshoumame)));
+    map.insert(MameGenus::Hiyokomame.name(), Vegetable::MameFamily(MameFamily::Mame(MameGenus::Hiyokomame)));
+    map.insert(MameGenus::Hiramame.name(), Vegetable::MameFamily(MameFamily::Mame(MameGenus::Hiramame)));
+    map.insert(MameGenus::Fujimame.name(), Vegetable::MameFamily(MameFamily::Mame(MameGenus::Fujimame)));
+    map.insert(MameGenus::Benibanaingen.name(), Vegetable::MameFamily(MameFamily::Mame(MameGenus::Benibanaingen)));
+    map.insert(MameGenus::Raimabiin.name(), Vegetable::MameFamily(MameFamily::Mame(MameGenus::Raimabiin)));
+    map.insert(MameGenus::Rakkasei.name(), Vegetable::MameFamily(MameFamily::Mame(MameGenus::Rakkasei)));
+    map.insert(MameGenus::Ryokutou.name(), Vegetable::MameFamily(MameFamily::Mame(MameGenus::Ryokutou)));
+
+    // Mikan
+    map.insert(MikanGenus::Sanshou.name(), Vegetable::MukurojiFamily(MukurojiFamily::Mikan(MikanGenus::Sanshou)));
+    map.insert(MikanGenus::Henruuda.name(), Vegetable::MukurojiFamily(MukurojiFamily::Mikan(MikanGenus::Henruuda)));
+
+    // Kiku
+    map.insert(KikuGenus::Aatichooku.name(), Vegetable::KikuFamily(KikuFamily::Kiku(KikuGenus::Aatichooku)));
+    map.insert(KikuGenus::Endaibu.name(), Vegetable::KikuFamily(KikuFamily::Kiku(KikuGenus::Endaibu)));
+    map.insert(KikuGenus::Orandasennichi.name(), Vegetable::KikuFamily(KikuFamily::Kiku(KikuGenus::Orandasennichi)));
+    map.insert(KikuGenus::Kakijisha.name(), Vegetable::KikuFamily(KikuFamily::Kiku(KikuGenus::Kakijisha)));
+    map.insert(KikuGenus::Kamomiiru.name(), Vegetable::KikuFamily(KikuFamily::Kiku(KikuGenus::Kamomiiru)));
+    map.insert(KikuGenus::Karudon.name(), Vegetable::KikuFamily(KikuFamily::Kiku(KikuGenus::Karudon)));
+    map.insert(KikuGenus::Kareepuranto.name(), Vegetable::KikuFamily(KikuFamily::Kiku(KikuGenus::Kareepuranto)));
+    map.insert(KikuGenus::Kiku.name(), Vegetable::KikuFamily(KikuFamily::Kiku(KikuGenus::Kiku)));
+    map.insert(KikuGenus::Kikuimo.name(), Vegetable::KikuFamily(KikuFamily::Kiku(KikuGenus::Kikuimo)));
+    map.insert(KikuGenus::Gobou.name(), Vegetable::KikuFamily(KikuFamily::Kiku(KikuGenus::Gobou)));
+    map.insert(KikuGenus::Sarushifai.name(), Vegetable::KikuFamily(KikuFamily::Kiku(KikuGenus::Sarushifai)));
+    map.insert(KikuGenus::Sanchu.name(), Vegetable::KikuFamily(KikuFamily::Kiku(KikuGenus::Sanchu)));
+    map.insert(KikuGenus::Shungiku.name(), Vegetable::KikuFamily(KikuFamily::Kiku(KikuGenus::Shungiku)));
+    map.insert(KikuGenus::Shokuyoutanpopo.name(), Vegetable::KikuFamily(KikuFamily::Kiku(KikuGenus::Shokuyoutanpopo)));
+    map.insert(KikuGenus::Suizenjina.name(), Vegetable::KikuFamily(KikuFamily::Kiku(KikuGenus::Suizenjina)));
+    map.insert(KikuGenus::Sutebia.name(), Vegetable::KikuFamily(KikuFamily::Kiku(KikuGenus::Sutebia)));
+    map.insert(KikuGenus::Tachijisha.name(), Vegetable::KikuFamily(KikuFamily::Kiku(KikuGenus::Tachijisha)));
+    map.insert(KikuGenus::Chikori.name(), Vegetable::KikuFamily(KikuFamily::Kiku(KikuGenus::Chikori)));
+    map.insert(KikuGenus::Chisha.name(), Vegetable::KikuFamily(KikuFamily::Kiku(KikuGenus::Chisha)));
+    map.insert(KikuGenus::Tsuwabuki.name(), Vegetable::KikuFamily(KikuFamily::Kiku(KikuGenus::Tsuwabuki)));
+    map.insert(KikuGenus::Torebisu.name(), Vegetable::KikuFamily(KikuFamily::Kiku(KikuGenus::Torebisu)));
+    map.insert(KikuGenus::Fuki.name(), Vegetable::KikuFamily(KikuFamily::Kiku(KikuGenus::Fuki)));
+    map.insert(KikuGenus::Yamagobou.name(), Vegetable::KikuFamily(KikuFamily::Kiku(KikuGenus::Yamagobou)));
+    map.insert(KikuGenus::Riifuretasu.name(), Vegetable::KikuFamily(KikuFamily::Kiku(KikuGenus::Riifuretasu)));
+    map.insert(KikuGenus::Retasu.name(), Vegetable::KikuFamily(KikuFamily::Kiku(KikuGenus::Retasu)));
+
+    // Goma
+    map.insert(GomaGenus::Goma.name(), Vegetable::GomanohagusaFamily(GomanohagusaFamily::Goma(GomaGenus::Goma)));
+
+    // Shiso
+    map.insert(ShisoGenus::Appuruminto.name(), Vegetable::ShisoFamily(ShisoFamily::Shiso(ShisoGenus::Appuruminto)));
+    map.insert(ShisoGenus::Uintaasaborii.name(), Vegetable::ShisoFamily(ShisoFamily::Shiso(ShisoGenus::Uintaasaborii)));
+    map.insert(ShisoGenus::Egoma.name(), Vegetable::ShisoFamily(ShisoFamily::Shiso(ShisoGenus::Egoma)));
+    map.insert(ShisoGenus::Oregano.name(), Vegetable::ShisoFamily(ShisoFamily::Shiso(ShisoGenus::Oregano)));
+    map.insert(ShisoGenus::Shiso.name(), Vegetable::ShisoFamily(ShisoFamily::Shiso(ShisoGenus::Shiso)));
+    map.insert(ShisoGenus::Supearaminto.name(), Vegetable::ShisoFamily(ShisoFamily::Shiso(ShisoGenus::Supearaminto)));
+    map.insert(ShisoGenus::Seiji.name(), Vegetable::ShisoFamily(ShisoFamily::Shiso(ShisoGenus::Seiji)));
+    map.insert(ShisoGenus::Taimu.name(), Vegetable::ShisoFamily(ShisoFamily::Shiso(ShisoGenus::Taimu)));
+    map.insert(ShisoGenus::Chorogi.name(), Vegetable::ShisoFamily(ShisoFamily::Shiso(ShisoGenus::Chorogi)));
+    map.insert(ShisoGenus::Numahakka.name(), Vegetable::ShisoFamily(ShisoFamily::Shiso(ShisoGenus::Numahakka)));
+    map.insert(ShisoGenus::Painappuruminto.name(), Vegetable::ShisoFamily(ShisoFamily::Shiso(ShisoGenus::Painappuruminto)));
+    map.insert(ShisoGenus::Hakka.name(), Vegetable::ShisoFamily(ShisoFamily::Shiso(ShisoGenus::Hakka)));
+    map.insert(ShisoGenus::Bajiru.name(), Vegetable::ShisoFamily(ShisoFamily::Shiso(ShisoGenus::Bajiru)));
+    map.insert(ShisoGenus::Pepaminto.name(), Vegetable::ShisoFamily(ShisoFamily::Shiso(ShisoGenus::Pepaminto)));
+    map.insert(ShisoGenus::Majoramu.name(), Vegetable::ShisoFamily(ShisoFamily::Shiso(ShisoGenus::Majoramu)));
+    map.insert(ShisoGenus::Rabendaa.name(), Vegetable::ShisoFamily(ShisoFamily::Shiso(ShisoGenus::Rabendaa)));
+    map.insert(ShisoGenus::Remontaimu.name(), Vegetable::ShisoFamily(ShisoFamily::Shiso(ShisoGenus::Remontaimu)));
+    map.insert(ShisoGenus::Remonbaamu.name(), Vegetable::ShisoFamily(ShisoFamily::Shiso(ShisoGenus::Remonbaamu)));
+    map.insert(ShisoGenus::Roozumarii.name(), Vegetable::ShisoFamily(ShisoFamily::Shiso(ShisoGenus::Roozumarii)));
+
+    // Murasaki
+    map.insert(MurasakiGenus::Konfurii.name(), Vegetable::ShisoFamily(ShisoFamily::Murasaki(MurasakiGenus::Konfurii)));
+
+
 
     map
 });
