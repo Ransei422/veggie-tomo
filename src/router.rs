@@ -2,7 +2,7 @@
 
 use std::sync::Arc;
 use routes::root::root;
-use tower_http::{services::{ServeDir, ServeFile}, set_status::SetStatus};
+use tower_http::{services::{ServeDir, ServeFile}, set_status::SetStatus, trace::TraceLayer};
 
 use crate::jwt::jwt;
 use axum::{routing::{get, post},
@@ -26,7 +26,8 @@ pub fn setup_routes(app_state: Arc<AppState>, serve_dir: ServeDir<SetStatus<Serv
         .route("/signin", post(jwt::sign_in_page))
         // APIs
         .merge(api_routes(app_state.clone()))
-        .nest_service("/assets", serve_dir.clone());
+        .nest_service("/assets", serve_dir.clone())
+        .layer(TraceLayer::new_for_http());
 
     route.with_state(app_state)
 }

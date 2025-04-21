@@ -6,7 +6,7 @@ use tower_http::services::{ServeDir, ServeFile};
 
 use crate::router::{setup_routes, setup_private_routes};
 use crate::state::AppState;
-use crate::errors;
+use crate::answers;
 use crate::enviroment::*;
 
 
@@ -22,7 +22,7 @@ pub async fn run() {
         .acquire_timeout(Duration::from_secs(5))
         .connect(&env_vals.database_url)
         .await
-        .map_err(|_| InitErrors::new(errors::InitializationErrorEnum::DBConnectionError))
+        .map_err(|_| InitErrors::new(answers::InitializationErrorEnum::DBConnectionError))
         .unwrap();
 
     let app_state: std::sync::Arc<AppState> = AppState::new(db_pool, jwt_secret);
@@ -34,23 +34,23 @@ pub async fn run() {
 
     let private_listener = tokio::net::TcpListener::bind(closed_env_host)
         .await
-        .map_err(|_| InitErrors::new(errors::InitializationErrorEnum::PortError1)).unwrap();
+        .map_err(|_| InitErrors::new(answers::InitializationErrorEnum::PortError1)).unwrap();
     
     let listener = tokio::net::TcpListener::bind(open_env_host)
         .await
-        .map_err(|_| InitErrors::new(errors::InitializationErrorEnum::PortError2)).unwrap();
+        .map_err(|_| InitErrors::new(answers::InitializationErrorEnum::PortError2)).unwrap();
 
     if registration_allowed {
         // Localhost only for registration
         tokio::spawn(async {
             axum::serve(private_listener, private_app)
                 .await
-                .map_err(|_| InitErrors::new(errors::InitializationErrorEnum::ServerError1)).unwrap();
+                .map_err(|_| InitErrors::new(answers::InitializationErrorEnum::ServerError1)).unwrap();
         });
     }
 
     // Open for API
     axum::serve(listener, public_app)
         .await
-        .map_err(|_| InitErrors::new(errors::InitializationErrorEnum::ServerError2)).unwrap();
+        .map_err(|_| InitErrors::new(answers::InitializationErrorEnum::ServerError2)).unwrap();
 }

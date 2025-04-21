@@ -2,13 +2,14 @@
 
 use axum::extract::{Json, State};
 use serde::{Deserialize, Serialize};
+use tracing::{error, info};
 use std::sync::Arc;
 use serde_json::{json, Value};
 use sqlx::FromRow;
 
 use crate::state::AppState;
+use crate::answers;
 use super::relations::{search_by_family, search_by_name};
-use super::answers;
 use super::utils;
 
 
@@ -82,6 +83,7 @@ pub async fn register_vegetables(app_state: State<Arc<AppState>>,
                 
                 };
 
+                info!("[ INF ] `register_vegetables` response OK: {}", response.status_answer);
                 return Json(response);
             },
 
@@ -95,6 +97,7 @@ pub async fn register_vegetables(app_state: State<Arc<AppState>>,
                     data: None,
                 };
 
+                error!("[ ERR ] `register_vegetables` response ERR: {}", response.status_answer);
                 return Json(response);
             }
         }
@@ -109,6 +112,7 @@ pub async fn register_vegetables(app_state: State<Arc<AppState>>,
             data: None,
         };
 
+        error!("[ ERR ] `register_vegetables` response ERR: {}", response.status_answer);
         return Json(response);
     }
 }
@@ -137,6 +141,7 @@ pub async fn check_registered_vegetable(app_state: State<Arc<AppState>>,
                 })),
             };
 
+            info!("[ INF ] `check_registered_vegetable` response OK: {}", response.status_answer);
             return Json(response);
         },
 
@@ -154,6 +159,7 @@ pub async fn check_registered_vegetable(app_state: State<Arc<AppState>>,
                 })),
             };
 
+            error!("[ ERR ] `check_registered_vegetable` response ERR: {}", response.status_answer);
             return Json(response);
         }
     }
@@ -179,6 +185,7 @@ pub async fn check_available_vegetable(Json(data): Json<VegetableFamilyJsonReque
             })),
         };
 
+        error!("[ ERR ] `check_available_vegetable` response ERR: {}", response.status_answer);
         return Json(response);
 
     } else {
@@ -203,6 +210,8 @@ pub async fn check_available_vegetable(Json(data): Json<VegetableFamilyJsonReque
                 "vegetable_list": veg_list,
             })),
         };
+
+        info!("[ INF ] `check_available_vegetable` response OK: {}", response.status_answer);
         return Json(response);
 
     }
@@ -235,6 +244,7 @@ pub async fn register_relationship(app_state: State<Arc<AppState>>,
                     })),
                 };
         
+                error!("[ ERR ] `register_relationship` response ERR: {}", response.status_answer);
                 return Json(response);
             }
         };
@@ -257,6 +267,7 @@ pub async fn register_relationship(app_state: State<Arc<AppState>>,
                     })),
                 };
         
+                error!("[ ERR ] `register_relationship` response ERR: {}", response.status_answer);
                 return Json(response);
             }
         };
@@ -279,6 +290,7 @@ pub async fn register_relationship(app_state: State<Arc<AppState>>,
                     })),
                 };
         
+                info!("[ INF ] `register_relationship` response OK: {}", response.status_answer);
                 return Json(response);
             },
 
@@ -294,6 +306,7 @@ pub async fn register_relationship(app_state: State<Arc<AppState>>,
                     })),
                 };
         
+                error!("[ ERR ] `register_relationship` response ERR: {}", response.status_answer);
                 return Json(response);
             }
         }

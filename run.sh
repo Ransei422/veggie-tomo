@@ -34,6 +34,7 @@ END
 EOF
 fi
 
+
 # Check and create database if it doesn't exist
 if ! sudo -u postgres psql -tAc "SELECT 1 FROM pg_database WHERE datname='veggie-tomo'" | grep -q 1; then
     echo "Creating database 'veggie-tomo'..."
@@ -63,5 +64,10 @@ if ! command -v cargo-watch &> /dev/null; then
     cargo install cargo-watch
 fi
 
-# Run it baby
-cargo-watch -x run
+
+# Set log level
+export RUST_LOG=info
+
+
+# Run it baby (and ignore logs because this will create infinity loop in cargo watch)
+cargo watch -i logs/ -x run

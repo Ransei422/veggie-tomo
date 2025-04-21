@@ -95,18 +95,69 @@ impl IntoResponse for AuthError {
 impl AuthError {
     pub fn new(code: StatusCode, err_type: AuthErrorEnum) -> AuthError {
         let error_type = match err_type {
-            AuthErrorEnum::MissingHeaderError => String::from("Empty header is not allowed"),
-            AuthErrorEnum::MissingHeaderTokenError => String::from("Please add the JWT token to the header"),
-            AuthErrorEnum::TokenDecodingError => String::from("Unable to decode token"),
-            AuthErrorEnum::TokenExpirationError => String::from("Token is expired"),
-            AuthErrorEnum::TokenAuthError => String::from("Using non-existing user token"),
-            AuthErrorEnum::SignInError => String::from("No right email/password field provided"),
-            AuthErrorEnum::UsersNotFoundError => String::from("No registered user found"),
+            AuthErrorEnum::MissingHeaderError => String::from("[ ERR ] 空のヘッダーは許可されていません"),
+            AuthErrorEnum::MissingHeaderTokenError => String::from("[ ERR ] ヘッダーにJWTトークンを追加してください"),
+            AuthErrorEnum::TokenDecodingError => String::from("[ ERR ] トークンをデコードできません"),
+            AuthErrorEnum::TokenExpirationError => String::from("[ ERR ] トークンの有効期限が切れています"),
+            AuthErrorEnum::TokenAuthError => String::from("[ ERR ] 存在しないユーザートークンの使用"),
+            AuthErrorEnum::SignInError => String::from("[ ERR ] 正しいメールアドレス/パスワードフィールドが指定されていません"),
+            AuthErrorEnum::UsersNotFoundError => String::from("[ ERR ] 登録ユーザーが見つかりません"),
         };
 
         AuthError {
             status_code: code,
             error_msg:error_type
+        }
+    }
+}
+
+pub enum ApiAnswersEnum {
+    Answer1,
+    Answer2,
+    Answer3,
+    Answer4,
+    Answer5,
+    Answer6,
+    Answer7,
+}
+
+
+
+pub struct ApiAnswers {
+    _name: ApiAnswersEnum,
+    pub code: StatusCode,
+    pub message: String,
+}
+
+
+
+impl ApiAnswers {
+    pub fn new(answer_name: ApiAnswersEnum) -> ApiAnswers {
+        let answer_type = match answer_name {
+            ApiAnswersEnum::Answer1 => String::from("[ INF ] データの登録を完了した"),
+            ApiAnswersEnum::Answer2 => String::from("[ ERR ] データが既にある"),
+            ApiAnswersEnum::Answer3 => String::from("[ ERR ] データが登録不可能になっている"),
+            ApiAnswersEnum::Answer4 => String::from("[ INF ] データがDBに存在している"),
+            ApiAnswersEnum::Answer5 => String::from("[ ERR ] データが見つからない"),
+            ApiAnswersEnum::Answer6 => String::from("[ ERR ] データが登録不可能になっている"),
+            ApiAnswersEnum::Answer7 => String::from("[ INF ] データが登録可能になっている"),
+            
+        };
+
+        let answer_code = match answer_name {
+            ApiAnswersEnum::Answer1 => StatusCode::OK,
+            ApiAnswersEnum::Answer2 => StatusCode::NOT_ACCEPTABLE,
+            ApiAnswersEnum::Answer3 => StatusCode::NOT_IMPLEMENTED,
+            ApiAnswersEnum::Answer4 => StatusCode::OK,
+            ApiAnswersEnum::Answer5 => StatusCode::NOT_FOUND,
+            ApiAnswersEnum::Answer6 => StatusCode::NOT_FOUND,
+            ApiAnswersEnum::Answer7 => StatusCode::FOUND,
+        };
+
+        ApiAnswers {
+            _name: answer_name,
+            code: answer_code,
+            message:answer_type
         }
     }
 }

@@ -42,3 +42,4 @@ $RECYCLE.BIN/
 # === Misc ===
 .env
 .env.*
+logs/

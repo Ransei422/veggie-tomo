@@ -22,10 +22,11 @@ use jsonwebtoken::{
     TokenData,
     Validation
 };
+use tracing::{error, info};
 
 use crate::{
-    errors::AuthErrorEnum,
-    errors::AuthError,
+    answers::AuthErrorEnum,
+    answers::AuthError,
     state::AppState};
 
 use super::services::*;
@@ -76,20 +77,33 @@ pub async fn sign_in_page(
     let db_users = retrieve_all_users(&app_state).await;
 
     if db_users.len() == 0 {
-        return Err(AuthError::new(StatusCode::NOT_FOUND,
-            AuthErrorEnum::UsersNotFoundError));
+        let response_error = AuthError::new(StatusCode::NOT_FOUND,
+            AuthErrorEnum::UsersNotFoundError);
+
+        error!("[ ERR-1 ] `sign_in_page` response ERR: {}", response_error.error_msg);
+        return Err(response_error);
     }
 
     let user_data_email = match user_data.email {
         Some(d) => d,
-        None => return Err(AuthError::new(StatusCode::NOT_ACCEPTABLE,
-            AuthErrorEnum::SignInError))
+        None => {
+            let response_error = AuthError::new(StatusCode::NOT_ACCEPTABLE,
+                AuthErrorEnum::SignInError);
+
+            error!("[ ERR-2 ] `sign_in_page` response ERR: {}", response_error.error_msg);
+            return Err(response_error)
+        }
     };
 
     let user_data_password = match user_data.password {
         Some(d) => d,
-        None => return Err(AuthError::new(StatusCode::NOT_ACCEPTABLE,
-            AuthErrorEnum::SignInError))
+        None => {
+            let response_error = AuthError::new(StatusCode::NOT_ACCEPTABLE,
+                AuthErrorEnum::SignInError);
+
+            error!("[ ERR-3 ] `sign_in_page` response ERR: {}", response_error.error_msg);
+            return Err(response_error)
+        }
     };
 
     let matching_user = db_users
@@ -99,18 +113,31 @@ pub async fn sign_in_page(
 
     if let Some(user) = matching_user {
         if verify_password(&user_data_password, &user.password_hash).unwrap_or(false) {
-            
+
             let token = encode_jwt(user.email.clone(), jwt_secret)
-                .map_err(|_| AuthError::new(StatusCode::UNAUTHORIZED,
-                    AuthErrorEnum::TokenAuthError))?;
+                .map_err(|_| {
+                    let response_error = AuthError::new(StatusCode::UNAUTHORIZED,
+                        AuthErrorEnum::TokenAuthError);
+                    
+                    error!("[ ERR-4 ] `sign_in_page` response ERR: {}", response_error.error_msg);
+                    response_error
+                    })?;
+
+            info!("[ INF ] `sign_in_page` response OK");
             return Ok(Json(token))
         } else {
-            return Err(AuthError::new(StatusCode::UNAUTHORIZED,
-                AuthErrorEnum::TokenAuthError));
+            let response_error = AuthError::new(StatusCode::UNAUTHORIZED,
+                AuthErrorEnum::TokenAuthError);
+            
+            error!("[ ERR-5 ] `sign_in_page` response ERR: {}", response_error.error_msg);
+            return Err(response_error);
         }
     } else {
-        return Err(AuthError::new(StatusCode::UNAUTHORIZED,
-            AuthErrorEnum::TokenAuthError))
+        let response_error = AuthError::new(StatusCode::UNAUTHORIZED,
+            AuthErrorEnum::TokenAuthError);
+
+        error!("[ ERR-6 ] `sign_in_page` response ERR: {}", response_error.error_msg); 
+        return Err(response_error);
     }
 }
 
@@ -126,13 +153,20 @@ pub async fn authorize(
     let auth_header = req.headers_mut().get(http::header::AUTHORIZATION);
 
     let auth_header = match auth_header {
-        Some(header) => header.to_str().map_err(|_| 
-            AuthError::new(StatusCode::UNAUTHORIZED,
-            AuthErrorEnum::MissingHeaderError))?,
-
-        None => return Err(
-            AuthError::new(StatusCode::UNAUTHORIZED,
-            AuthErrorEnum::MissingHeaderTokenError))?,
+        Some(header) => header.to_str().map_err(|_| {
+            let response_error = AuthError::new(StatusCode::UNAUTHORIZED, 
+                AuthErrorEnum::MissingHeaderError);
+            
+            error!("[ ERR-1 ] `authorize` response ERR: {}", response_error.error_msg);
+            response_error
+        })?,
+        
+        None => {
+            let response_error = AuthError::new(StatusCode::UNAUTHORIZED,
+                AuthErrorEnum::MissingHeaderTokenError);
+            
+            error!("[ ERR-2 ] `authorize` response ERR: {}", response_error.error_msg);
+            return Err(response_error)},
     };
 
     let mut header = auth_header.split_whitespace();
@@ -140,16 +174,22 @@ pub async fn authorize(
 
     let token_data = match decode_jwt(token.unwrap().to_string(), jwt_secret) {
         Ok(data) => data,
-        Err(_) => return Err(
-            AuthError::new(StatusCode::UNAUTHORIZED,
-            AuthErrorEnum::TokenDecodingError)),
+        Err(_) => {
+            let response_error = AuthError::new(StatusCode::UNAUTHORIZED,
+                AuthErrorEnum::TokenDecodingError);
+            
+            error!("[ ERR-3 ] `authorize` response ERR: {}", response_error.error_msg);
+            return Err(response_error);},
     };
     
     let token_user = token_data.claims;
 
     if token_user.exp < Utc::now().timestamp() as usize {
-        return Err(AuthError::new(StatusCode::UNAUTHORIZED,
-            AuthErrorEnum::TokenExpirationError));
+        let response_error = AuthError::new(StatusCode::UNAUTHORIZED,
+            AuthErrorEnum::TokenExpirationError);
+        
+        error!("[ ERR-4 ] `authorize` response ERR: {}", response_error.error_msg);
+        return Err(response_error);
     }
 
     let db_users = retrieve_all_users(&app_state).await;
@@ -161,10 +201,15 @@ pub async fn authorize(
 
     if let Some(user) = matching_user {
         req.extensions_mut().insert(user.clone());
-        Ok(next.run(req).await)
+
+        info!("[ INF ] `authorize` response OK");
+        return Ok(next.run(req).await);
     } else {
-        return Err(AuthError::new(StatusCode::UNAUTHORIZED,
-            AuthErrorEnum::TokenAuthError))
+        let response_error = AuthError::new(StatusCode::UNAUTHORIZED,
+            AuthErrorEnum::TokenAuthError);
+        
+        error!("[ ERR-5 ] `authorize` response ERR: {}", response_error.error_msg);
+        return Err(response_error);
     }
 
 }

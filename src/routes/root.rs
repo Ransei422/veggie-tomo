@@ -5,7 +5,11 @@ use axum::{
     response::Html,
     http::StatusCode,
 };
+
+use tracing::info;
 use crate::state::AppState;
+
+
 
 #[allow(dead_code)]
 #[derive(Template)]
@@ -19,6 +23,6 @@ pub async fn root(State(_app_state): State<Arc<AppState>>) -> impl axum::respons
     let page_template = RegisterTemplate {
         title: "Root Page"
     };
-
+    info!("[ INF ] Got request at `/`");
     (StatusCode::OK, Html(page_template.render().unwrap()))
 }
