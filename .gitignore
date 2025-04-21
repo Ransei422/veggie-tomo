@@ -42,4 +42,5 @@ $RECYCLE.BIN/
 # === Misc ===
 .env
 .env.*
-logs/
+logs/*
+!logs/.gitkeep
