@@ -2,13 +2,18 @@
 
 use std::sync::Arc;
 use routes::root::root;
-use tower_http::{services::{ServeDir, ServeFile}, set_status::SetStatus, trace::TraceLayer};
-
-use crate::jwt::jwt;
-use axum::{routing::{get, post},
-        Router
+use tower_http::{
+    services::{ServeDir, ServeFile},
+    set_status::SetStatus,
+    trace::TraceLayer};
+use axum::{
+    routing::{get, post},
+    Router
 };
-use crate::{fallback::fallback,
+
+use crate::jwt;
+use crate::{
+    fallback::fallback,
     routes,
     state::AppState
 };
@@ -23,7 +28,7 @@ pub fn setup_routes(app_state: Arc<AppState>, serve_dir: ServeDir<SetStatus<Serv
         .fallback(fallback)
         // Main Page
         .route("/", get(root))
-        .route("/signin", post(jwt::sign_in_page))
+        .route("/signin", post(jwt::sockets::sign_in_page))
         // APIs
         .merge(api_routes(app_state.clone()))
         .nest_service("/assets", serve_dir.clone())
@@ -32,9 +37,12 @@ pub fn setup_routes(app_state: Arc<AppState>, serve_dir: ServeDir<SetStatus<Serv
     route.with_state(app_state)
 }
 
+
+
 pub fn setup_private_routes(app_state: Arc<AppState>, serve_dir: ServeDir<SetStatus<ServeFile>>) -> Router {
     let route = Router::new()
     .fallback(fallback)
+    // Users
     .merge(user_routes())
         .nest_service("/assets", serve_dir.clone());
     route.with_state(app_state)

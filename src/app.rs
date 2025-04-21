@@ -2,12 +2,20 @@
 
 use std::time::Duration;
 use sqlx::postgres::PgPoolOptions;
-use tower_http::services::{ServeDir, ServeFile};
+use tower_http::services::{
+    ServeDir,
+    ServeFile
+};
 
-use crate::router::{setup_routes, setup_private_routes};
+
+use crate::router::{
+    setup_routes,
+    setup_private_routes
+};
 use crate::state::AppState;
 use crate::answers;
 use crate::enviroment::*;
+
 
 
 pub async fn run() {

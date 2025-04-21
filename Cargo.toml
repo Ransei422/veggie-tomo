@@ -1,23 +1,48 @@
 [package]
 name = "veggie-tomo"
-version = "0.1.0"
+version = "0.2.0"
+authors = ["Kopera Marcel"]
 edition = "2021"
+description = "Back-end server for Veggie-tomo project"
+readme = "README.md"
+repository = "https://github.com/Suomi422/veggie-tomo"
+publish = false
+
 
 [dependencies]
+# Core Web Framework
 axum = { version = "~0.8.0" }
+tower-http = { version = "0.6.2", features = ["fs", "trace"] }
+
+# Async Runtime
 tokio = { version = "1.44.2", features = ["full"] }
+once_cell = "1.18"
+
+# Serialization / Deserialization
 serde = { version = "~1.0.217", features = ["derive"] }
 serde_json = { version = "~1.0.134" }
+
+# HTTP Utilities
 http = { version = "~1.1.0" }
+
+# Environment Configuration
 dotenv = "0.15"
+
+# Database and Time
 sqlx = { version = "0.8", features = ["runtime-tokio", "postgres", "chrono"] }
-bcrypt = "0.17.0"
 chrono = { version = "0.4.34", features = ["serde"] }
-jsonwebtoken = "9.3.0"
+
+# Templating
 askama = "0.13.0"
-validator = { version = "0.20", features = ["derive"]}
-tower-http = { version = "0.6.2", features = ["fs", "trace"] }
-once_cell = "1.18"
+
+# Authentication / Security
+bcrypt = "0.17.0"
+jsonwebtoken = "9.3.0"
+
+# Validation
+validator = { version = "0.20", features = ["derive"] }
+
+# Logging / Tracing
 tracing = "0.1"
-tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 tracing-appender = "0.2"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }

@@ -1,11 +1,14 @@
-// == File for app's error handling == 
+// == File for app's answers handling == 
 
-use axum::{body::Body,
+use http::StatusCode;
+use serde_json::json;
+
+use axum::{
+    body::Body,
     response::{IntoResponse, Response}, 
     Json
 };
-use http::StatusCode;
-use serde_json::json;
+
 
 
 #[derive(Debug)]
@@ -23,13 +26,11 @@ pub enum InitializationErrorEnum {
 }
 
 
-
 #[derive(Debug)]
 pub struct InitializationError {
     _code: InitializationErrorEnum,
     pub error_msg: String,
 }
-
 
 
 impl InitializationError {
@@ -83,13 +84,12 @@ pub struct AuthError {
 impl IntoResponse for AuthError {
     fn into_response(self) -> Response<Body> {
         let body = Json(json!({
-            "API ERROR": self.error_msg,
+            "AUTH ERROR": self.error_msg,
         }));
 
         (self.status_code, body).into_response()
     }
 }
-
 
 
 impl AuthError {
@@ -111,6 +111,8 @@ impl AuthError {
     }
 }
 
+
+
 pub enum ApiAnswersEnum {
     Answer1,
     Answer2,
@@ -122,13 +124,11 @@ pub enum ApiAnswersEnum {
 }
 
 
-
 pub struct ApiAnswers {
     _name: ApiAnswersEnum,
     pub code: StatusCode,
     pub message: String,
 }
-
 
 
 impl ApiAnswers {
@@ -138,7 +138,7 @@ impl ApiAnswers {
             ApiAnswersEnum::Answer2 => String::from("[ ERR ] データが既にある"),
             ApiAnswersEnum::Answer3 => String::from("[ ERR ] データが登録不可能になっている"),
             ApiAnswersEnum::Answer4 => String::from("[ INF ] データがDBに存在している"),
-            ApiAnswersEnum::Answer5 => String::from("[ ERR ] データが見つからない"),
+            ApiAnswersEnum::Answer5 => String::from("[ INF ] データが見つからない"),
             ApiAnswersEnum::Answer6 => String::from("[ ERR ] データが登録不可能になっている"),
             ApiAnswersEnum::Answer7 => String::from("[ INF ] データが登録可能になっている"),
             

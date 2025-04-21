@@ -83,7 +83,13 @@ pub async fn register_vegetables(app_state: State<Arc<AppState>>,
                 
                 };
 
-                info!("[ INF ] `register_vegetables` response OK: {}", response.status_answer);
+                info!(
+                    code = "INF",
+                    endpoint = "register_vegetables",
+                    status = response.status_code,
+                    answer = response.status_answer,
+                    server_message = "OK"
+                );
                 return Json(response);
             },
 
@@ -97,7 +103,13 @@ pub async fn register_vegetables(app_state: State<Arc<AppState>>,
                     data: None,
                 };
 
-                error!("[ ERR ] `register_vegetables` response ERR: {}", response.status_answer);
+                error!(
+                    code = "ERR-1",
+                    endpoint = "register_vegetables",
+                    status = response.status_code,
+                    answer = response.status_answer,
+                    server_message = "Could not register vegetable into DB"
+                );
                 return Json(response);
             }
         }
@@ -112,7 +124,13 @@ pub async fn register_vegetables(app_state: State<Arc<AppState>>,
             data: None,
         };
 
-        error!("[ ERR ] `register_vegetables` response ERR: {}", response.status_answer);
+        error!(
+            code = "ERR-2",
+            endpoint = "register_vegetables",
+            status = response.status_code,
+            answer = response.status_answer,
+            server_message = "Could not find vegetable by its name"
+        );
         return Json(response);
     }
 }
@@ -141,7 +159,13 @@ pub async fn check_registered_vegetable(app_state: State<Arc<AppState>>,
                 })),
             };
 
-            info!("[ INF ] `check_registered_vegetable` response OK: {}", response.status_answer);
+            info!(
+                code = "INF",
+                endpoint = "check_registered_vegetable",
+                status = response.status_code,
+                answer = response.status_answer,
+                server_message = "OK"
+            );
             return Json(response);
         },
 
@@ -159,7 +183,13 @@ pub async fn check_registered_vegetable(app_state: State<Arc<AppState>>,
                 })),
             };
 
-            error!("[ ERR ] `check_registered_vegetable` response ERR: {}", response.status_answer);
+            error!(
+                code = "ERR",
+                endpoint = "check_registered_vegetable",
+                status = response.status_code,
+                answer = response.status_answer,
+                server_message = "Could not find vegetable by its name"
+            );
             return Json(response);
         }
     }
@@ -185,7 +215,13 @@ pub async fn check_available_vegetable(Json(data): Json<VegetableFamilyJsonReque
             })),
         };
 
-        error!("[ ERR ] `check_available_vegetable` response ERR: {}", response.status_answer);
+        error!(
+            code = "ERR",
+            endpoint = "check_available_vegetable",
+            status = response.status_code,
+            answer = response.status_answer,
+            server_message = "Could not find vegetable by its family-name"
+        );
         return Json(response);
 
     } else {
@@ -211,7 +247,13 @@ pub async fn check_available_vegetable(Json(data): Json<VegetableFamilyJsonReque
             })),
         };
 
-        info!("[ INF ] `check_available_vegetable` response OK: {}", response.status_answer);
+        info!(
+            code = "INF",
+            endpoint = "check_available_vegetable",
+            status = response.status_code,
+            answer = response.status_answer,
+            server_message = "OK"
+        );
         return Json(response);
 
     }
@@ -244,7 +286,13 @@ pub async fn register_relationship(app_state: State<Arc<AppState>>,
                     })),
                 };
         
-                error!("[ ERR ] `register_relationship` response ERR: {}", response.status_answer);
+                error!(
+                    code = "ERR-1",
+                    endpoint = "register_relationship",
+                    status = response.status_code,
+                    answer = response.status_answer,
+                    server_message = "Could not find relation-registerable vegetable1 in DB"
+                );
                 return Json(response);
             }
         };
@@ -267,7 +315,13 @@ pub async fn register_relationship(app_state: State<Arc<AppState>>,
                     })),
                 };
         
-                error!("[ ERR ] `register_relationship` response ERR: {}", response.status_answer);
+                error!(
+                    code = "ERR-2",
+                    endpoint = "register_relationship",
+                    status = response.status_code,
+                    answer = response.status_answer,
+                    server_message = "Could not find relation-registerable vegetable2 in DB"
+                );
                 return Json(response);
             }
         };
@@ -290,7 +344,13 @@ pub async fn register_relationship(app_state: State<Arc<AppState>>,
                     })),
                 };
         
-                info!("[ INF ] `register_relationship` response OK: {}", response.status_answer);
+                info!(
+                    code = "INF",
+                    endpoint = "register_relationship",
+                    status = response.status_code,
+                    answer = response.status_answer,
+                    server_message = "OK"
+                );
                 return Json(response);
             },
 
@@ -306,7 +366,13 @@ pub async fn register_relationship(app_state: State<Arc<AppState>>,
                     })),
                 };
         
-                error!("[ ERR ] `register_relationship` response ERR: {}", response.status_answer);
+                error!(
+                    code = "ERR-3",
+                    endpoint = "register_relationship",
+                    status = response.status_code,
+                    answer = response.status_answer,
+                    server_message = "Could not register relationship"
+                );
                 return Json(response);
             }
         }

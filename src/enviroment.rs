@@ -3,9 +3,12 @@
 use std::env;
 use dotenv::dotenv;
 
+
 use crate::answers;
 
+
 pub type InitErrors = answers::InitializationError;
+
 
 
 #[warn(dead_code)]
@@ -16,6 +19,7 @@ pub struct Enviroment {
     pub closed_host: String,
     pub registration_allowed: String,
 }
+
 
 
 impl Enviroment {

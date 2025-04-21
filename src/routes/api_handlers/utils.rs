@@ -2,10 +2,18 @@
 
 use axum::extract::State;
 use std::sync::Arc;
-use sqlx::{postgres::PgQueryResult, query, query_as};
+use sqlx::{
+    postgres::PgQueryResult,
+    query,
+    query_as
+};
 
 use crate::state::AppState;
-use super::{relations::Vegetable, sockets::VegetableData};
+
+use super::{
+    relations::Vegetable,
+    sockets::VegetableData
+};
 
 
 

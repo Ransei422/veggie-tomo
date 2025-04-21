@@ -1,21 +1,27 @@
+// == File for User's registration ==
+
+
+use std::sync::Arc;
+use validator::Validate;
+use sqlx::query;
+use askama::Template;
+use serde::{
+    Deserialize,
+    Serialize
+};
+
 use axum::{
     extract::State,
     http::StatusCode,
     response::Html, Form,
 };
-use validator::Validate;
 
-use std::sync::Arc;
-
-use sqlx::query;
-use askama::Template;
-use serde::{Deserialize, Serialize};
 
 use crate::state::AppState;
-use crate::jwt::jwt::hash_password;
+use crate::jwt::utils::hash_password;
 
 
-#[allow(dead_code)]
+
 #[derive(Template)]
 #[template(path="partials/register.html")]
 struct RegisterTemplate<'a> {
@@ -24,6 +30,7 @@ struct RegisterTemplate<'a> {
     messages: Vec<String>,
     color: String
 }
+
 
 
 #[derive(Debug, Serialize, Deserialize, Validate)]
@@ -37,6 +44,7 @@ pub struct RegisterData {
     #[validate (must_match(other=password, message="パスワードが一致していない"))]
     pub confirm_password: String,
 }
+
 
 
 pub async fn register_page(State(app_state): State<Arc<AppState>>,) -> impl axum::response::IntoResponse {
@@ -57,6 +65,8 @@ pub async fn register_page(State(app_state): State<Arc<AppState>>,) -> impl axum
 
     (StatusCode::OK, Html(page_template.render().unwrap()))
 }
+
+
 
 pub async fn register_form(State(app_state): State<Arc<AppState>>,Form(data): Form<RegisterData>) -> impl axum::response::IntoResponse {
     
@@ -102,7 +112,6 @@ pub async fn register_form(State(app_state): State<Arc<AppState>>,Form(data): Fo
         if result.expect("EXISTING USER").rows_affected() == 0 {
             let message = String::from("・すでに登録済みのメールアドレスが登録できない");
             msgs.push(message);
-
 
             let page_template: RegisterTemplate<'_> = RegisterTemplate {
                 title: "Register Page",

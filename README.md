@@ -2,10 +2,15 @@
 
 ## 1. Server installation
 
-To run do the steps bellow:
+To run first time do the steps bellow:
 1. cd veggie-tomo
-2. sudo chmod +x run.sh
-3. ./run.sh
+2. sudo chmod +x install.sh
+3. ./install.sh
+------------------------------------------------
+
+After that you can run server without root:
+* Server will run with "INFO" level logging (change inside `run.sh` to `error`)
+1. ./run.sh
 ------------------------------------------------
 
 

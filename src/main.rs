@@ -21,7 +21,7 @@ async fn main() {
         .with_writer(file_appender)
         .with_env_filter(
             EnvFilter::try_from_default_env()
-                .unwrap_or_else(|_| EnvFilter::new("error"))  // fallback to "error"
+                .unwrap_or_else(|_| EnvFilter::new("error"))  // fallback to  default "error"
         )
         .with_ansi(false) // disables escape codes
         .init();

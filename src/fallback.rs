@@ -2,8 +2,11 @@
 
 use std::sync::Arc;
 use askama::Template;
-use axum::{extract::State, response::Html};
 use http::StatusCode;
+use axum::{
+    extract::State,
+    response::Html
+};
 
 use crate::state::AppState;
 

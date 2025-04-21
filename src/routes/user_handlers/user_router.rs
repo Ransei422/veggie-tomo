@@ -1,10 +1,15 @@
-use std::sync::Arc;
+// == File for Users routing ==
 
-use axum::{routing::{get, post}, Router};
+use std::sync::Arc;
+use axum::{
+    routing::{get, post},
+    Router
+};
 
 use crate::state::AppState;
 
 use super::users::*;
+
 
 
 pub fn user_routes()  -> Router<Arc<AppState>> {
