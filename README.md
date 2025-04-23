@@ -8,7 +8,7 @@ To run first time do the steps bellow:
 3. ./install.sh
 ------------------------------------------------
 
-After that you can run server without root:
+After that RESTART TERMINAL and you can run server without root:
 * Server will run with "INFO" level logging (change inside `run.sh` to `error`)
 1. ./run.sh
 ------------------------------------------------
